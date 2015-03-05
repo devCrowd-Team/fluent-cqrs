@@ -1,2 +1,2 @@
 # fluent-cqrs
-My Next Generation CQRS Framework for .Net Applications
+My TNG "The Next Generation" CQRS Framework for .Net Applications
