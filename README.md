@@ -29,7 +29,7 @@ Uhhh... this is a complete Handling of a Domain Command.
 
 Ok, but what should I do to **publish** the new state, aka **Domain Events**?
 
-This is simple. You assign a Action<IEnumerable<IAmAnEventMessage>> to the `aggregates.PublishNewState` property and consume the published events in this method. Take a look
+This is simple. You assign a `Action<IEnumerable<IAmAnEventMessage>>` to the `aggregates.PublishNewState` property and consume the published events in this method. Take a look
 
     var _aggregates = new Aggregates(yourExtremeGoodEventStoreInstance);
     
