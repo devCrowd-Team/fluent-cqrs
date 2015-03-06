@@ -6,11 +6,11 @@ Why fluent? Let's have a look at this:
 
     public class AwsomeCommandHandler 
     {
-      AggregateStore _aggregates;
+      Aggregates _aggregates;
     
-      public AwsomeCommandHandler(AggregateStore aggregateStore)
+      public AwsomeCommandHandler(Aggregates aggregates)
       {
-        _aggregateStore = aggregateStore;
+        _aggregates = aggregates;
       }
       
       public void Handle(SuperDuperCommand command)
