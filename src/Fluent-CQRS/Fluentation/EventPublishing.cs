@@ -5,21 +5,21 @@ namespace Fluent_CQRS.Fluentation
 {
     public class EventPublishing
     {
-        private readonly AggregateStore _aggregateStore;
+        private readonly Aggregates _aggregates;
         private readonly Aggregate _aggregate;
 
-        public EventPublishing(AggregateStore aggregateStore, Aggregate aggregate)
+        public EventPublishing(Aggregates aggregates, Aggregate aggregate)
         {
-            _aggregateStore = aggregateStore;
+            _aggregates = aggregates;
             _aggregate = aggregate;
         }
 
         public void AndPublishTheNewState()
         {
-            if(_aggregateStore.Publish.IsNotDefined())
-                throw new ArgumentException("Keine Definition der Action Publish am AggregateStore gefunden. Ein Publizieren der Events ist nicht möglich");
+            if(_aggregates.Publish.IsNotDefined())
+                throw new ArgumentException("Keine Definition der Action Publish am Aggregates gefunden. Ein Publizieren der Events ist nicht möglich");
 
-            _aggregateStore.Publish(_aggregate.Changes);
+            _aggregates.Publish(_aggregate.Changes);
             _aggregate.Changes.Clear();
         }
     }

@@ -5,18 +5,18 @@ namespace Fluent_CQRS.Sample.Domain
 {
     public class SampleCommandHandler
     {
-        readonly AggregateStore _aggregateStore;
+        readonly Aggregates _aggregates;
 
-        public SampleCommandHandler(AggregateStore aggregateStore)
+        public SampleCommandHandler(Aggregates aggregates)
         {
-            _aggregateStore = aggregateStore;
+            _aggregates = aggregates;
         }
 
         public void Handle(SampleDomainCommand command)
         {
             Console.WriteLine("Command recieved");
 
-            _aggregateStore.Provide<SampleAggregate>().With(command)
+            _aggregates.Provide<SampleAggregate>().With(command)
                 .Do(aggregate=>aggregate.SampleAggregateMethod(command.MyValue))
                 .FinallySaveIt()
                 .AndPublishTheNewState();

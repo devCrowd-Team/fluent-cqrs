@@ -5,22 +5,22 @@ namespace Fluent_CQRS.Fluentation
     public class AfterInvocation<TAggregate> where TAggregate : Aggregate
     {
         private readonly TAggregate _aggregate;
-        private readonly AggregateStore _aggregateStore;
+        private readonly Aggregates _aggregates;
 
-        public AfterInvocation(TAggregate aggregate, AggregateStore aggregateStore)
+        public AfterInvocation(TAggregate aggregate, Aggregates aggregates)
         {
             _aggregate = aggregate;
-            _aggregateStore = aggregateStore;
+            _aggregates = aggregates;
         }
 
         public EventPublishing FinallySaveIt()
         {
-            _aggregateStore.SaveChangesBy(_aggregate);
+            _aggregates.SaveChangesBy(_aggregate);
 
-            if(_aggregateStore.Publish.IsNotDefined())
+            if(_aggregates.Publish.IsNotDefined())
                 _aggregate.Changes.Clear();
 
-            return new EventPublishing(_aggregateStore, _aggregate);
+            return new EventPublishing(_aggregates, _aggregate);
         }
     }
 }

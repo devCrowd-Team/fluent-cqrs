@@ -6,12 +6,12 @@ namespace Fluent_CQRS.Fluentation
     public sealed class ProvideAggregate<TAggregate> where TAggregate : Aggregate
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
-        private readonly AggregateStore _aggregateStore;
+        private readonly Aggregates _aggregates;
 
-        public ProvideAggregate(IStoreAndRetrieveEvents eventStore, AggregateStore aggregateStore)
+        public ProvideAggregate(IStoreAndRetrieveEvents eventStore, Aggregates aggregates)
         {
             _eventStore = eventStore;
-            _aggregateStore = aggregateStore;
+            _aggregates = aggregates;
         }
 
         public DoActionOnAggregate<TAggregate> With(IAmACommandMessage command)
@@ -22,7 +22,7 @@ namespace Fluent_CQRS.Fluentation
 
             aggregateInstance.History = aggregateEvents;
 
-            return new DoActionOnAggregate<TAggregate>(aggregateInstance, _aggregateStore);
+            return new DoActionOnAggregate<TAggregate>(aggregateInstance, _aggregates);
         }
 
         static TAggregate AggregateInstance(IAmACommandMessage command)
