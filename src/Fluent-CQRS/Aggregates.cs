@@ -5,11 +5,11 @@ using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS
 {
-    public sealed class AggregateStore
+    public sealed class Aggregates
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
 
-        public AggregateStore(IStoreAndRetrieveEvents eventStore)
+        public Aggregates(IStoreAndRetrieveEvents eventStore)
         {
             _eventStore = eventStore;
         }
@@ -30,6 +30,6 @@ namespace Fluent_CQRS
             newEvents.ForEach(eventMessage => _eventStore.StoreFor(aggregateId, eventMessage));
         }
 
-        public Action<IEnumerable<IAmAnEventMessage>> Publish { get; set; }  
+        public Action<IEnumerable<IAmAnEventMessage>> PublishNewState { get; set; }  
     }
 }

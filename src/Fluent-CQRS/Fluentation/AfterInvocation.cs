@@ -17,7 +17,7 @@ namespace Fluent_CQRS.Fluentation
         {
             _aggregates.SaveChangesBy(_aggregate);
 
-            if(_aggregates.Publish.IsNotDefined())
+            if(_aggregates.PublishNewState.IsNotDefined())
                 _aggregate.Changes.Clear();
 
             return new EventPublishing(_aggregates, _aggregate);

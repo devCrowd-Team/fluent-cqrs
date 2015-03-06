@@ -12,12 +12,12 @@ namespace Fluent_CQRS.Sample.Domain
         static void Main(string[] args)
         {
 
-            var aggregateStore = new Aggregates(new InMemoryEventStore());
+            var aggregates = new Aggregates(new InMemoryEventStore());
 
             var sampleEventHandler = new SampleEventHandler();
-            var sampleCommandHandler = new SampleCommandHandler(aggregateStore);
+            var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            aggregateStore.Publish = sampleEventHandler.RecieveEvents;
+            aggregates.PublishNewState = sampleEventHandler.RecieveEvents;
 
             var aggregateId = Guid.NewGuid().ToString();
 

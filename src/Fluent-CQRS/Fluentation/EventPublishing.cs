@@ -1,4 +1,3 @@
-using System;
 using Fluent_CQRS.Extensions;
 
 namespace Fluent_CQRS.Fluentation
@@ -16,10 +15,10 @@ namespace Fluent_CQRS.Fluentation
 
         public void AndPublishTheNewState()
         {
-            if(_aggregates.Publish.IsNotDefined())
-                throw new ArgumentException("Keine Definition der Action Publish am Aggregates gefunden. Ein Publizieren der Events ist nicht möglich");
+            if (_aggregates.PublishNewState.IsNotDefined())
+                throw new MissingEventsPublishingTarget();
 
-            _aggregates.Publish(_aggregate.Changes);
+            _aggregates.PublishNewState(_aggregate.Changes);
             _aggregate.Changes.Clear();
         }
     }
