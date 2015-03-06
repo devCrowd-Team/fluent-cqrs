@@ -25,21 +25,21 @@ namespace Fluent_CQRS.Sample.Domain
                 new SampleDomainCommand
                 {
                     Id = aggregateId,
-                    MyValue = "Hallo Welt 1"
+                    MyValue = "Hi There"
                 });
 
             sampleCommandHandler.Handle(
                 new SampleDomainCommand
                 {
                     Id = aggregateId,
-                    MyValue = "Hallo Welt 2"
+                    MyValue = "Hello Kitty"
                 });
 
             sampleCommandHandler.Handle(
                 new SampleDomainCommand
                 {
                     Id = aggregateId,
-                    MyValue = "Hallo Welt 3"
+                    MyValue = "Hey Dude"
                 });
 
             Console.ReadLine();
