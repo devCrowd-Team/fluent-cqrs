@@ -1,9 +1,9 @@
 # fluent-cqrs
-My TNG "The Next Generation" CQRS Framework for .Net Applications
+"The Next Generation" CQRS Framework for .Net applications
 
 ---
 
-Why fluent? Let's have a look at this:
+Why fluent? Just look at this:
 
     public class AwsomeCommandHandler 
     {
@@ -16,25 +16,27 @@ Why fluent? Let's have a look at this:
       
       public void Handle(SuperDuperCommand command)
       {
-        _aggregates.Provide<[AnAggregateYouLike]>.With(command.AggregateId)
+        _aggregates
+          .Provide<[AnAggregateYouLike]>
+          .With(command.AggregateId)
           .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
           .FinallySaveIt()
           .AndPublishTheNewState();
       }
     }
 
-Uhhh... this is a complete Handling of a Domain Command.
+Uhhh... this is the *complete handling* of a Domain Command.
 
 ---
 
-Ok, but what should I do to **publish** the new state, aka **Domain Events**?
+Ok, but what do I have to do to **publish** the new state, aka **Domain Events**?
 
-This is simple. You assign a `Action<IEnumerable<IAmAnEventMessage>>` to the `aggregates.PublishNewState` property and consume the published events in this method. Take a look
+This is simple. You assign a `Action<IEnumerable<IAmAnEventMessage>>` to the `aggregates.PublishNewState` property and consume the published events in this method. For example:
 
     var _aggregates = new Aggregates(yourExtremeGoodEventStoreInstance);
     
     _aggregates.PublishNewState = yourCoolEventHandler.RecieveEvents;
     
-All right... Now your cool event handler gets all changes of an aggregate.
+now your cool event handler receives all changes of an aggregate.
 
 
