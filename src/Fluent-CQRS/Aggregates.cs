@@ -21,13 +21,13 @@ namespace Fluent_CQRS
 
         public void SaveChangesBy(Aggregate aggregate)
         {
-            var newEvents = aggregate
-                .Changes
-                .ToList();
-
             var aggregateId = aggregate.Id;
 
-            newEvents.ForEach(eventMessage => _eventStore.StoreFor(aggregateId, eventMessage));
+            aggregate
+                .Changes
+                .ToList()
+                .ForEach(eventMessage => 
+                    _eventStore.StoreFor(aggregateId, eventMessage));
         }
 
         public Action<IEnumerable<IAmAnEventMessage>> PublishNewState { get; set; }  

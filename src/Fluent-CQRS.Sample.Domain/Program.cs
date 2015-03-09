@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-
             var aggregates = new Aggregates(new InMemoryEventStore());
 
             var sampleEventHandler = new SampleEventHandler();
@@ -41,6 +36,7 @@ namespace Fluent_CQRS.Sample.Domain
                     Id = aggregateId,
                     MyValue = "Hey Dude"
                 });
+
 
             Console.ReadLine();
 

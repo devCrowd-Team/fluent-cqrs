@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain

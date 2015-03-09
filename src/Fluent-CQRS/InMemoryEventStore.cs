@@ -28,7 +28,8 @@ namespace Fluent_CQRS
         {
             return _events
                 .Where(eventMessage => eventMessage.AggregateId.Equals(aggregateId))
-                .Select(eventBag => eventBag.Event);
+                .Select(eventBag => eventBag.Event)
+                .ToArray();
         }
     }
 }
