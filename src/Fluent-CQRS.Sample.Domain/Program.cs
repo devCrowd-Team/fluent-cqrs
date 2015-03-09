@@ -12,7 +12,7 @@ namespace Fluent_CQRS.Sample.Domain
         static void Main(string[] args)
         {
 
-            var aggregates = new Aggregates(new InMemoryEventStore());
+            var aggregates = Aggregates.CreateWith(new InMemoryEventStore());
 
             var sampleEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);

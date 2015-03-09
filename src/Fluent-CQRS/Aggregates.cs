@@ -9,7 +9,12 @@ namespace Fluent_CQRS
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
 
-        public Aggregates(IStoreAndRetrieveEvents eventStore)
+        public static Aggregates CreateWith(IStoreAndRetrieveEvents eventStore)
+        {
+            return new Aggregates(eventStore);
+        }
+
+        internal Aggregates(IStoreAndRetrieveEvents eventStore)
         {
             _eventStore = eventStore;
         }
