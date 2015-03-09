@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
-    <Compile Include="AggregateStore.cs" />
+    <Compile Include="Aggregates.cs" />
     <Compile Include="EventBag.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="IAmAnEventMessage.cs" />
     <Compile Include="InMemoryEventStore.cs" />
     <Compile Include="IStoreAndRetrieveEvents.cs" />
+    <Compile Include="MissingEventsPublishingTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
