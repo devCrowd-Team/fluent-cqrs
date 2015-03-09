@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="fastjson">
-      <HintPath>..\packages\fastJSON.2.1.10.0\lib\net40\fastjson.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,7 +43,6 @@
     <Compile Include="Aggregates.cs" />
     <Compile Include="EventBag.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
-    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Fluentation\AfterInvocation.cs" />
     <Compile Include="Fluentation\DoActionOnAggregate.cs" />
     <Compile Include="Fluentation\EventPublishing.cs" />
@@ -57,9 +53,6 @@
     <Compile Include="IStoreAndRetrieveEvents.cs" />
     <Compile Include="MissingEventsPublishingTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
