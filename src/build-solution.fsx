@@ -2,6 +2,7 @@
 #r @"packages/FAKE/tools/FakeLib.dll"
 
 open Fake
+open Fake.AssemblyInfoFile
 
 let buildOutput = "./build/"
 let testBuildOutput = "./build/for_tests/"
@@ -23,6 +24,16 @@ Target "Clean" (fun _ ->
 )
 
 Target "Build" (fun _ ->
+
+    CreateCSharpAssemblyInfo "./Fluent-CQRS/Properties/AssemblyInfo.cs"
+        [Attribute.Title "Fluent CQRS Framework"
+         Attribute.Description "The next generation of CQRS Framework."
+         Attribute.Company ""
+         Attribute.Copyright "Copyright © Jan Fellien"
+         Attribute.Guid "41246c8a-9b02-4be4-83ec-c88a26ee6054"
+         Attribute.Product "Fluent-CQRS"
+         Attribute.Version version
+         Attribute.FileVersion version]
 
     !! (sourceProjectDir + "*.csproj")
         |> MSBuildRelease buildOutput "Build"
