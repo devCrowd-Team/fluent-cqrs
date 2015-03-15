@@ -33,7 +33,7 @@ Ok, but what do I have to do to **publish** the new state, aka **Domain Events**
 
 This is simple. You assign a `Action<IEnumerable<IAmAnEventMessage>>` to the `aggregates.PublishNewState` property and consume the published events in this method. For example:
 
-    var _aggregates = new Aggregates(yourExtremeGoodEventStoreInstance);
+    var _aggregates = Aggregates.CreateWith(yourExtremeGoodEventStoreInstance);
     
     _aggregates.PublishNewState = yourCoolEventHandler.RecieveEvents;
     
