@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Fluent-CQRS.Sample.Contracts")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Rhenus Assets & Services GmbH & Co. KG")]
+[assembly: AssemblyCompany("devCrowd GmbH")]
 [assembly: AssemblyProduct("Fluent-CQRS.Sample.Contracts")]
-[assembly: AssemblyCopyright("Copyright © Rhenus Assets & Services GmbH & Co. KG 2015")]
+[assembly: AssemblyCopyright("Copyright © devCrowd GmbH")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
