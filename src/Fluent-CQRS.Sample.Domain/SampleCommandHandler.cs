@@ -19,7 +19,7 @@ namespace Fluent_CQRS.Sample.Domain
             _aggregates.Provide<SampleAggregate>().With(command)
                 .Do(aggregate=>aggregate.SampleAggregateMethod(command.MyValue))
                 .FinallySaveIt()
-                .AndPublishTheNewState();
+                .AndPublishNewState();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Fluent_CQRS.Fluentation
             _aggregate = aggregate;
         }
 
-        public void AndPublishTheNewState()
+        public void AndPublishNewState()
         {
             if (_aggregates.PublishNewState.IsNotDefined())
                 throw new MissingEventsPublishingTarget();
