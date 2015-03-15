@@ -18,7 +18,7 @@ Why fluent? Just look at this:
       {
         _aggregates
           .Provide<[AnAggregateYouLike]>
-          .With(command.AggregateId)
+          .With(command)
           .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
           .FinallySaveIt()
           .AndPublishNewState();
