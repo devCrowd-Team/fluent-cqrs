@@ -21,7 +21,7 @@ Why fluent? Just look at this:
           .With(command.AggregateId)
           .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
           .FinallySaveIt()
-          .AndPublishTheNewState();
+          .AndPublishNewState();
       }
     }
 
