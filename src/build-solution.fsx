@@ -40,13 +40,6 @@ Target "Build" (fun _ ->
         |> Log "AppBuild-Output: "
 )
 
-Target "Build" (fun _ ->
-
-    !! (sourceProjectDir + "*.csproj")
-        |> MSBuildRelease buildOutput "Build"
-        |> Log "AppBuild-Output: "
-)
-
 Target "Clean BuildResults" (fun _ ->
     !!(buildOutput + "*.pdb")
         |> DeleteFiles 
