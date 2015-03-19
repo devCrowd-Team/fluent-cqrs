@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Fluent-CQRS</id>
+    <version>1.1.0</version>
+    <title>Fluent-CQRS</title>
+    <authors>Jan Fellien - devCrowd GmbH</authors>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>https://github.com/jfellien/fluent-cqrs</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      "The Next Generation" CQRS Framework for .Net applications
+    </description>
+    <tags>CQRS, Event Sourcing, DDD, Domain Driven Design</tags>
+  </metadata>
+  <files>
+    <file src="..\Fluent-CQRS\bin\Release\net35\Fluent-CQRS.dll" target="lib\net35-client\Fluent-CQRS.dll" />
+    <file src="..\Fluent-CQRS\bin\Release\net40\Fluent-CQRS.dll" target="lib\net40-client\Fluent-CQRS.dll" />
+    <file src="..\Fluent-CQRS\bin\Release\net45\Fluent-CQRS.dll" target="lib\net45\Fluent-CQRS.dll" />
+  </files>
+</package>

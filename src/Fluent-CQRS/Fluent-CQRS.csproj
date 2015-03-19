@@ -81,13 +81,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="AggregateLifeCycle.cs" />
     <Compile Include="Aggregates.cs" />
     <Compile Include="EventBag.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
-    <Compile Include="Fluentation\AfterInvocation.cs" />
-    <Compile Include="Fluentation\DoActionOnAggregate.cs" />
-    <Compile Include="Fluentation\EventPublishing.cs" />
-    <Compile Include="Fluentation\ProvideAggregate.cs" />
+    <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
+    <Compile Include="Fluentation\IProvideAnAggregate.cs" />
+    <Compile Include="Fluentation\IPublishNewState.cs" />
+    <Compile Include="Fluentation\ISaveAggregates.cs" />
     <Compile Include="IAmACommandMessage.cs" />
     <Compile Include="IAmAnEventMessage.cs" />
     <Compile Include="InMemoryEventStore.cs" />
