@@ -14,7 +14,7 @@ namespace Fluent_CQRS.Sample.Domain
 
         void HandleMessage(SampleEventRaised message)
         {
-            Console.WriteLine("Event {0} empfangen", message.GetType());
+            Console.WriteLine("Event {0} empfangen: {1}", message.GetType(),message.MyValue);
         }
 
         void Handle(object unknownMessage)
