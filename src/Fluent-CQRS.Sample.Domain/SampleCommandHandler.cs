@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using Fluent_CQRS.Sample.Contracts;
+using Fluent_CQRS.Extensions;
 
 namespace Fluent_CQRS.Sample.Domain
 {
@@ -19,8 +19,7 @@ namespace Fluent_CQRS.Sample.Domain
 
             _aggregates.Provide<SampleAggregate>().With(command)
                 .Do(aggregate => aggregate.SampleAggregateMethod(command.MyValue))
-                .FinallySaveIt()
-                .AndPublishNewState();
+                .OnError(Console.WriteLine);
         }
     }
 }

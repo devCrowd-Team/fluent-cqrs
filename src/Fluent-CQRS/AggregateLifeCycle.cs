@@ -8,9 +8,7 @@ namespace Fluent_CQRS
 {
     internal class AggregateLifeCycle<TAggregate> : 
         IProvideAnAggregate<TAggregate>, 
-        IInvokeActionsOnAggregates<TAggregate>,
-        ISaveAggregates,
-        IPublishNewState where TAggregate : Aggregate
+        IInvokeActionsOnAggregates<TAggregate> where TAggregate : Aggregate
     {
         readonly IStoreAndRetrieveEvents _eventStore;
         readonly Action<IEnumerable<IAmAnEventMessage>> _publishMethod;
@@ -41,33 +39,78 @@ namespace Fluent_CQRS
             return this;
         }
 
-        public ISaveAggregates Do(Action<TAggregate> doAction)
+        public ExecutionResult Do(Action<TAggregate> doAction)
         {
-            doAction.Invoke(_aggregate);
+            var executionResult = InvokeAggregateMethod(doAction);
 
-            return this;
+            executionResult = StoreChanges(executionResult);
+
+            executionResult = PublishChanges(executionResult);
+
+            return executionResult;
         }
 
-        public IPublishNewState FinallySaveIt()
+        private ExecutionResult InvokeAggregateMethod(Action<TAggregate> doAction)
         {
-            var aggregateId = _aggregate.Id;
+            var executionResult= new ExecutionResult();
 
-            _aggregate
-                .Changes
-                .ToList()
-                .ForEach(eventMessage =>
-                    _eventStore.StoreFor(aggregateId, eventMessage));
+            try
+            {
+                doAction.Invoke(_aggregate);
 
-            return this;
+                executionResult.Executed = true;
+            }
+            catch (Exception ex)
+            {
+                executionResult.Error = ex;
+                return executionResult;
+            }
+
+            return executionResult;
         }
 
-        public void AndPublishNewState()
+        private ExecutionResult StoreChanges(ExecutionResult executionResult)
         {
-            if (_publishMethod.IsNotDefined())
-                throw new MissingEventsPublishingTarget();
+            try
+            {
+                var aggregateId = _aggregate.Id;
 
-            _publishMethod(_aggregate.Changes);
-            _aggregate.Changes.Clear();
+                _aggregate
+                    .Changes
+                    .ToList()
+                    .ForEach(eventMessage =>
+                        _eventStore.StoreFor(aggregateId, eventMessage));
+
+                executionResult.Saved = true;
+            }
+            catch (Exception ex)
+            {
+                executionResult.Error = ex;
+                return executionResult;
+            }
+
+            return executionResult;
+        }
+
+        private ExecutionResult PublishChanges(ExecutionResult executionResult)
+        {
+            try
+            {
+                if (_publishMethod.IsNotDefined())
+                    throw new MissingEventsPublishingTarget();
+
+                _publishMethod(_aggregate.Changes);
+                _aggregate.Changes.Clear();
+
+                executionResult.Published = true;
+            }
+            catch (Exception ex)
+            {
+                executionResult.Error = ex;
+                return executionResult;
+            }
+
+            return executionResult;
         }
     }
 }
