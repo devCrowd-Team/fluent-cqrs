@@ -19,9 +19,16 @@ Why fluent? Just look at this:
         _aggregates
           .Provide<[AnAggregateYouLike]>
           .With(command.AggregateId)
-          .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-          .FinallySaveIt()
-          .AndPublishNewState();
+          .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data));
+
+		  // You want it with exception handling?
+		  // Lets do it
+
+		  _aggregates
+			.Provide<[AnAggregateYouLike]>
+			.With(command.AggregateId)
+			.Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+			.OnError(exception=> handleThis(exception));
       }
     }
 
