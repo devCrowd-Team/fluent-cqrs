@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Fluent_CQRS.Extensions
 {
@@ -22,6 +21,20 @@ namespace Fluent_CQRS.Extensions
         {
             return source.Subscribe(new DelegateObserver<T>(action));
         }
+
+        public static IObservable<object> SentEventsTo<tTarget>(this IObservable<object> source, Action<tTarget> handler)
+            where tTarget : class
+        {
+            source.OfType<tTarget>().Subscribe(handler);
+            return source;
+        }
+
+        public static IObservable<object> AndTo<tTarget>(this IObservable<object> source, Action<tTarget> handler)
+            where tTarget : class
+        {
+            return source.SentEventsTo(handler);
+        }
+
 
     }
 

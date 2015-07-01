@@ -14,39 +14,38 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            using (aggregates
+            aggregates
                 .PublishNewState
                 .Flatten()
-                .OfType<SampleEventRaised>()
-                .Subscribe(sampleEventHandler.HandleMessage))
-            {
+                .SentEventsTo<SampleEventRaised>(sampleEventHandler.HandleMessage)
+                .AndTo<IAmAnEventMessage>(_ => { Console.WriteLine("--Message--\n"); });
+            
 
-                var aggregateId = Guid.NewGuid().ToString();
+            var aggregateId = Guid.NewGuid().ToString();
 
-                sampleCommandHandler.Handle(
-                    new SampleDomainCommand
-                    {
-                        Id = aggregateId,
-                        MyValue = "Hi There"
-                    });
+            sampleCommandHandler.Handle(
+                new SampleDomainCommand
+                {
+                    Id = aggregateId,
+                    MyValue = "Hi There"
+                });
 
-                sampleCommandHandler.Handle(
-                    new SampleDomainCommand
-                    {
-                        Id = aggregateId,
-                        MyValue = "Hello Kitty"
-                    });
+            sampleCommandHandler.Handle(
+                new SampleDomainCommand
+                {
+                    Id = aggregateId,
+                    MyValue = "Hello Kitty"
+                });
 
-                sampleCommandHandler.Handle(
-                    new SampleDomainCommand
-                    {
-                        Id = aggregateId,
-                        MyValue = "Hey Dude"
-                    });
+            sampleCommandHandler.Handle(
+                new SampleDomainCommand
+                {
+                    Id = aggregateId,
+                    MyValue = "Hey Dude"
+                });
 
 
-                Console.ReadLine();
-            }
+            Console.ReadLine();
         }
     }
 }
