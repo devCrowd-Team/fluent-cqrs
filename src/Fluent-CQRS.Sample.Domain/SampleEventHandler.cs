@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain
@@ -9,19 +10,14 @@ namespace Fluent_CQRS.Sample.Domain
     {
         public void RecieveEvents(IEnumerable<IAmAnEventMessage> eventMessages)
         {
-            eventMessages.ToList().ForEach(message => HandleMessage((dynamic)message));
+            eventMessages.ToList().ForEach(message => this.GetType().InvokeMember("HandleMessage", BindingFlags.InvokeMethod, null, this, new object[]{message}));
         }
 
-        void HandleMessage(SampleEventRaised message)
+        public void HandleMessage(SampleEventRaised message)
         {
             Console.WriteLine("Event {0} empfangen: {1}", message.GetType(),message.MyValue);
         }
 
-        void Handle(object unknownMessage)
-        {
-            throw new ArgumentException(
-                String.Format("Dieser Event Typ {0} ist keinem Handler zugeordnet",
-                unknownMessage.GetType()));
-        }
+        
     }
 }
