@@ -77,7 +77,7 @@
   <ItemGroup>
     <Compile Include="SampleDomainCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleEventRaised.cs" />
+    <Compile Include="SampleEventInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fluent-CQRS\Fluent-CQRS.csproj">

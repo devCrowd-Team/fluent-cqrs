@@ -15,8 +15,8 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
             aggregates
-                .SentEventsTo<SampleEventRaised>(sampleEventHandler.HandleMessage)
-                .AndTo<IAmAnEventMessage>(_ => { Console.WriteLine("--Message--\n"); });
+                .SentEventsTo<SampleEventInformation>(sampleEventHandler.HandleMessage)
+                .AndTo<ICarryEventInformation>(_ => { Console.WriteLine("--Message--\n"); });
             
 
             var aggregateId = Guid.NewGuid().ToString();

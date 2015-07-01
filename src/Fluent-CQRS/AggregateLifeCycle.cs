@@ -11,10 +11,10 @@ namespace Fluent_CQRS
         IInvokeActionsOnAggregates<TAggregate> where TAggregate : Aggregate
     {
         readonly IStoreAndRetrieveEvents _eventStore;
-        readonly Action<IEnumerable<IAmAnEventMessage>> _publishMethod;
+        readonly Action<IEnumerable<ICarryEventInformation>> _publishMethod;
         static TAggregate _aggregate;
 
-        public AggregateLifeCycle(IStoreAndRetrieveEvents eventStore, Action<IEnumerable<IAmAnEventMessage>> publishMethod)
+        public AggregateLifeCycle(IStoreAndRetrieveEvents eventStore, Action<IEnumerable<ICarryEventInformation>> publishMethod)
         {
             _eventStore = eventStore;
             _publishMethod = publishMethod;

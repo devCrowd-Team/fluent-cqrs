@@ -5,10 +5,10 @@ using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS
 {
-    public sealed class Aggregates : IObservable<IAmAnEventMessage>
+    public sealed class Aggregates : IObservable<ICarryEventInformation>
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
-        private readonly Subject<IEnumerable<IAmAnEventMessage>> _publishedEvents;
+        private readonly Subject<IEnumerable<ICarryEventInformation>> _publishedEvents;
 
         public static Aggregates CreateWith(IStoreAndRetrieveEvents eventStore)
         {
@@ -18,7 +18,7 @@ namespace Fluent_CQRS
         internal Aggregates(IStoreAndRetrieveEvents eventStore)
         {
             _eventStore = eventStore;
-            _publishedEvents = new Subject<IEnumerable<IAmAnEventMessage>>();
+            _publishedEvents = new Subject<IEnumerable<ICarryEventInformation>>();
         }
 
         public IProvideAnAggregate<TAggregate> Provide<TAggregate>() where TAggregate : Aggregate
@@ -26,7 +26,7 @@ namespace Fluent_CQRS
             return new AggregateLifeCycle<TAggregate>(_eventStore, _publishedEvents.OnNext);
         }
 
-        public IDisposable Subscribe(IObserver<IAmAnEventMessage> observer)
+        public IDisposable Subscribe(IObserver<ICarryEventInformation> observer)
         {
             return _publishedEvents.Flatten().Subscribe(observer);
         }

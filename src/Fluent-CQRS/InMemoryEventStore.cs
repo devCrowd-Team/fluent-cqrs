@@ -13,22 +13,22 @@ namespace Fluent_CQRS
             _events = new List<EventBag>();
         }
 
-        public void StoreFor(String aggregateId, IAmAnEventMessage eventMessage)
+        public void StoreFor(String aggregateId, ICarryEventInformation eventInformation)
         {
             _events.Add(new EventBag
             {
                 AggregateId = aggregateId,
-                TypeOfEvent = eventMessage.GetType(),
+                TypeOfData = eventInformation.GetType(),
                 TimeStamp = DateTime.UtcNow,
-                Event = eventMessage
+                Information = eventInformation
             });
         }
 
-        public IEnumerable<IAmAnEventMessage> RetrieveFor(String aggregateId)
+        public IEnumerable<ICarryEventInformation> RetrieveFor(String aggregateId)
         {
             return _events
                 .Where(eventMessage => eventMessage.AggregateId.Equals(aggregateId))
-                .Select(eventBag => eventBag.Event)
+                .Select(eventBag => eventBag.Information)
                 .ToArray();
         }
     }

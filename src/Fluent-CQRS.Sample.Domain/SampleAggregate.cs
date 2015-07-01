@@ -9,7 +9,7 @@ namespace Fluent_CQRS.Sample.Domain
 
         public void SampleAggregateMethod(string myValue)
         {
-            Changes.Add(new SampleEventRaised{MyValue = myValue});
+            Changes.Add(new SampleEventInformation{MyValue = myValue});
         }
     }
 }

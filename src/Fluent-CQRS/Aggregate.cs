@@ -7,15 +7,15 @@ namespace Fluent_CQRS
     {
         public Aggregate(String id)
         {
-            Changes = new List<IAmAnEventMessage>();
-            History = new List<IAmAnEventMessage>();
+            Changes = new List<ICarryEventInformation>();
+            History = new List<ICarryEventInformation>();
 
             Id = id;
         }
 
-        public IEnumerable<IAmAnEventMessage> History { get; set; }
+        public IEnumerable<ICarryEventInformation> History { get; set; }
 
-        public IList<IAmAnEventMessage> Changes { get; private set; }
+        public IList<ICarryEventInformation> Changes { get; private set; }
 
         public String Id { get; protected internal set; }
     }
