@@ -5,7 +5,7 @@ using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS
 {
-    public sealed class Aggregates
+    public sealed class Aggregates : IObservable<IAmAnEventMessage>
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
         private readonly Subject<IEnumerable<IAmAnEventMessage>> _publishedEvents;
@@ -26,8 +26,9 @@ namespace Fluent_CQRS
             return new AggregateLifeCycle<TAggregate>(_eventStore, _publishedEvents.OnNext);
         }
 
-        public IObservable<IEnumerable<IAmAnEventMessage>> PublishNewState {
-            get { return _publishedEvents; }
+        public IDisposable Subscribe(IObserver<IAmAnEventMessage> observer)
+        {
+            return _publishedEvents.Flatten().Subscribe(observer);
         }
     }
 }

@@ -15,8 +15,6 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
             aggregates
-                .PublishNewState
-                .Flatten()
                 .SentEventsTo<SampleEventRaised>(sampleEventHandler.HandleMessage)
                 .AndTo<IAmAnEventMessage>(_ => { Console.WriteLine("--Message--\n"); });
             
