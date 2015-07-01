@@ -39,78 +39,45 @@ namespace Fluent_CQRS
             return this;
         }
 
-        public ExecutionResult Do(Action<TAggregate> doAction)
+        public ExecutionResult<ExecutionFlags> Do(Action<TAggregate> doAction)
         {
-            var executionResult = InvokeAggregateMethod(doAction);
-
-            executionResult = StoreChanges(executionResult);
-
-            executionResult = PublishChanges(executionResult);
-
-            return executionResult;
+            return 
+                InvokeAggregateMethod(doAction)
+                .ThenTry(StoreChanges)
+                .ThenTry(PublishChanges);
         }
 
-        private ExecutionResult InvokeAggregateMethod(Action<TAggregate> doAction)
+        private ExecutionResult<ExecutionFlags> InvokeAggregateMethod(Action<TAggregate> doAction)
         {
-            var executionResult= new ExecutionResult();
-
-            try
+            return ExecutionResult.Try(() =>
             {
                 doAction.Invoke(_aggregate);
-
-                executionResult.Executed = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
-
-            return executionResult;
+                return new ExecutionFlags {WasExecuted = true};
+            });
         }
 
-        private ExecutionResult StoreChanges(ExecutionResult executionResult)
+        private ExecutionFlags StoreChanges(ExecutionFlags flags)
         {
-            try
-            {
-                var aggregateId = _aggregate.Id;
+            var aggregateId = _aggregate.Id;
 
-                _aggregate
-                    .Changes
-                    .ToList()
-                    .ForEach(eventMessage =>
-                        _eventStore.StoreFor(aggregateId, eventMessage));
+            _aggregate
+                .Changes
+                .ToList()
+                .ForEach(eventMessage =>
+                    _eventStore.StoreFor(aggregateId, eventMessage));
 
-                executionResult.Saved = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
-
-            return executionResult;
+            return flags.Saved();
         }
 
-        private ExecutionResult PublishChanges(ExecutionResult executionResult)
+        private ExecutionFlags PublishChanges(ExecutionFlags flags)
         {
-            try
-            {
-                if (_publishMethod.IsNotDefined())
-                    throw new MissingEventsPublishingTarget();
+            if (_publishMethod.IsNotDefined())
+                throw new MissingEventsPublishingTarget();
 
-                _publishMethod(_aggregate.Changes);
-                _aggregate.Changes.Clear();
+            _publishMethod(_aggregate.Changes);
+            _aggregate.Changes.Clear();
 
-                executionResult.Published = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
-
-            return executionResult;
+            return flags.Published();
         }
     }
 }

@@ -2,8 +2,8 @@ using System;
 
 namespace Fluent_CQRS.Fluentation
 {
-    public interface IInvokeActionsOnAggregates<TAggregate>
+    public interface IInvokeActionsOnAggregates<out TAggregate>
     {
-        ExecutionResult Do(Action<TAggregate> doAction);
+        ExecutionResult<ExecutionFlags> Do(Action<TAggregate> doAction);
     }
 }
