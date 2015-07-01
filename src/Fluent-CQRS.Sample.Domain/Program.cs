@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive.Linq;
+using Fluent_CQRS.Extensions;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain
@@ -13,7 +15,11 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            using (aggregates.PublishNewState.Subscribe(sampleEventHandler.RecieveEvents))
+            using (aggregates
+                .PublishNewState
+                .Flatten()
+                .OfType<SampleEventRaised>()
+                .Subscribe(sampleEventHandler.HandleMessage))
             {
 
                 var aggregateId = Guid.NewGuid().ToString();

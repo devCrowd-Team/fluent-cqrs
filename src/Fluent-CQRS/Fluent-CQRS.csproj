@@ -87,6 +87,7 @@
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
     <Compile Include="Extensions\ExecutionResultExtension.cs" />
+    <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
     <Compile Include="IAmACommandMessage.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
