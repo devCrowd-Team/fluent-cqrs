@@ -5,7 +5,7 @@ namespace Fluent_CQRS
 {
     public interface IStoreAndRetrieveEvents
     {
-        void StoreFor(String aggegateId, IAmAnEventMessage eventMessage);
-        IEnumerable<IAmAnEventMessage> RetrieveFor(String aggregateId);
+        void StoreFor(String aggegateId, ICarryEventInformation information);
+        IEnumerable<ICarryEventInformation> RetrieveFor(String aggregateId);
     }
 }

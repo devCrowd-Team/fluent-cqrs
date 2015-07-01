@@ -1,4 +1,5 @@
 ﻿using System;
+using Fluent_CQRS.Extensions;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain
@@ -13,7 +14,10 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            aggregates.PublishNewState = sampleEventHandler.RecieveEvents;
+            aggregates
+                .SentEventsTo<SampleEventInformation>(sampleEventHandler.HandleMessage)
+                .AndTo<ICarryEventInformation>(_ => { Console.WriteLine("--Message--\n"); });
+            
 
             var aggregateId = Guid.NewGuid().ToString();
 
@@ -40,7 +44,6 @@ namespace Fluent_CQRS.Sample.Domain
 
 
             Console.ReadLine();
-
         }
     }
 }

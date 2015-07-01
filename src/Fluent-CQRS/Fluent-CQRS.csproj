@@ -87,14 +87,18 @@
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
     <Compile Include="Extensions\ExecutionResultExtension.cs" />
+    <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
     <Compile Include="IAmACommandMessage.cs" />
-    <Compile Include="IAmAnEventMessage.cs" />
+    <Compile Include="ICarryEventInformation.cs" />
     <Compile Include="InMemoryEventStore.cs" />
     <Compile Include="IStoreAndRetrieveEvents.cs" />
     <Compile Include="MissingEventsPublishingTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
