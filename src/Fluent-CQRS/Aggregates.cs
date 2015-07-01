@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS
@@ -7,6 +8,7 @@ namespace Fluent_CQRS
     public sealed class Aggregates
     {
         private readonly IStoreAndRetrieveEvents _eventStore;
+        private readonly Subject<IEnumerable<IAmAnEventMessage>> _publishedEvents;
 
         public static Aggregates CreateWith(IStoreAndRetrieveEvents eventStore)
         {
@@ -16,13 +18,16 @@ namespace Fluent_CQRS
         internal Aggregates(IStoreAndRetrieveEvents eventStore)
         {
             _eventStore = eventStore;
+            _publishedEvents = new Subject<IEnumerable<IAmAnEventMessage>>();
         }
 
         public IProvideAnAggregate<TAggregate> Provide<TAggregate>() where TAggregate : Aggregate
         {
-            return new AggregateLifeCycle<TAggregate>(_eventStore, PublishNewState);
+            return new AggregateLifeCycle<TAggregate>(_eventStore, _publishedEvents.OnNext);
         }
 
-        public Action<IEnumerable<IAmAnEventMessage>> PublishNewState { get; set; }
+        public IObservable<IEnumerable<IAmAnEventMessage>> PublishNewState {
+            get { return _publishedEvents; }
+        }
     }
 }

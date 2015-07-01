@@ -24,7 +24,7 @@ namespace Fluent_CQRS
         {
             var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), command.Id);
 
-            _aggregate = ((TAggregate)aggregateAsObject);
+            _aggregate = (TAggregate)aggregateAsObject;
             return _aggregate;
         }
 

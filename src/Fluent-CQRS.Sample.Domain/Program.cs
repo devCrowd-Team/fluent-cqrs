@@ -13,34 +13,35 @@ namespace Fluent_CQRS.Sample.Domain
             var sampleEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            aggregates.PublishNewState = sampleEventHandler.RecieveEvents;
+            using (aggregates.PublishNewState.Subscribe(sampleEventHandler.RecieveEvents))
+            {
 
-            var aggregateId = Guid.NewGuid().ToString();
+                var aggregateId = Guid.NewGuid().ToString();
 
-            sampleCommandHandler.Handle(
-                new SampleDomainCommand
-                {
-                    Id = aggregateId,
-                    MyValue = "Hi There"
-                });
+                sampleCommandHandler.Handle(
+                    new SampleDomainCommand
+                    {
+                        Id = aggregateId,
+                        MyValue = "Hi There"
+                    });
 
-            sampleCommandHandler.Handle(
-                new SampleDomainCommand
-                {
-                    Id = aggregateId,
-                    MyValue = "Hello Kitty"
-                });
+                sampleCommandHandler.Handle(
+                    new SampleDomainCommand
+                    {
+                        Id = aggregateId,
+                        MyValue = "Hello Kitty"
+                    });
 
-            sampleCommandHandler.Handle(
-                new SampleDomainCommand
-                {
-                    Id = aggregateId,
-                    MyValue = "Hey Dude"
-                });
+                sampleCommandHandler.Handle(
+                    new SampleDomainCommand
+                    {
+                        Id = aggregateId,
+                        MyValue = "Hey Dude"
+                    });
 
 
-            Console.ReadLine();
-
+                Console.ReadLine();
+            }
         }
     }
 }
