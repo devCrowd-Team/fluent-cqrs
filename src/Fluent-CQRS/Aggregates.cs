@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Subjects;
+using Fluent_CQRS.Extensions;
 using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS

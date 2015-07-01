@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
 using Fluent_CQRS.Extensions;
 using Fluent_CQRS.Sample.Contracts;
 
