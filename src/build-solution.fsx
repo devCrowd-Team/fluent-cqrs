@@ -66,7 +66,7 @@ Target "Package" (fun _ ->
             Version = version
             OutputPath = publishDir
             WorkingDir = publishDir
-            Files = [builtAssembly, Some "lib/portable-net40+sl50+win+wpa81+wp80", None] })
+            Files = [builtAssembly, Some "lib/net45", None] })
             "package.nuspec"
 )
 
