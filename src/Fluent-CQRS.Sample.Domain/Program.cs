@@ -10,10 +10,15 @@ namespace Fluent_CQRS.Sample.Domain
 
             var aggregates = Aggregates.CreateWith(new InMemoryEventStore());
 
-            var sampleEventHandler = new SampleEventHandler();
+            var firstEventHandler = new SampleEventHandler();
+            var secondEventHandler = new SampleEventHandler();
+            var thirdEventHandler = new SampleEventHandler();
             var sampleCommandHandler = new SampleCommandHandler(aggregates);
 
-            aggregates.PublishNewState = sampleEventHandler.RecieveEvents;
+            aggregates
+                .PublishNewStateTo(firstEventHandler)
+                .And(secondEventHandler)
+                .And(thirdEventHandler);
 
             var aggregateId = Guid.NewGuid().ToString();
 

@@ -84,13 +84,15 @@
     <Compile Include="AggregateLifeCycle.cs" />
     <Compile Include="Aggregates.cs" />
     <Compile Include="EventBag.cs" />
+    <Compile Include="EventHandlers.cs" />
+    <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\AggregateStoreExtension.cs" />
+    <Compile Include="Extensions\ExecutionResultExtension.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
-    <Compile Include="Fluentation\IPublishNewState.cs" />
-    <Compile Include="Fluentation\ISaveAggregates.cs" />
     <Compile Include="IAmACommandMessage.cs" />
     <Compile Include="IAmAnEventMessage.cs" />
+    <Compile Include="IConcatenateEventHandler.cs" />
     <Compile Include="InMemoryEventStore.cs" />
     <Compile Include="IStoreAndRetrieveEvents.cs" />
     <Compile Include="MissingEventsPublishingTarget.cs" />
