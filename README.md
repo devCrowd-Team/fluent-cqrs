@@ -39,12 +39,19 @@ Uhhh... this is the *complete handling* of a Domain Command.
 
 Ok, but what do I have to do to **publish** the new state, aka **Domain Events**?
 
-This is simple. You assign a `Action<IEnumerable<IAmAnEventMessage>>` to the `aggregates.PublishNewState` property and consume the published events in this method. For example:
+This is simple. You assign any Event Handler you like by chaining it by the `And` method after `PublishNewStateTo`. For example you have three Event Handlers:
 
     var _aggregates = Aggregates.CreateWith(yourExtremeGoodEventStoreInstance);
     
-    _aggregates.PublishNewState = yourCoolEventHandler.RecieveEvents;
+    var firstEventHandler = new SampleEventHandler();
+    var secondEventHandler = new ReportingHandler();
+    var thirdEventHandler = new LoggingHandler();
+
+    _aggregates
+      .PublishNewStateTo(firstEventHandler)
+      .And(secondEventHandler)
+      .And(thirdEventHandler);
     
-now your cool event handler receives all changes of an aggregate.
+now all your cool Event Handlers receiving all changes of an aggregate.
 
 
