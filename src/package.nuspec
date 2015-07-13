@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>@project@</id>
+        <version>@build.number@</version>
+        <title>@project@</title>
+        <authors>@authors@</authors>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/jfellien/fluent-cqrs</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>@description@</description>
+        <summary>@description@</summary>
+        <tags>@tags@</tags>
+        @dependencies@
+        @references@
+    </metadata>
+    @files@
+</package>

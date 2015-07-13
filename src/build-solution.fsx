@@ -4,11 +4,19 @@
 open Fake
 open Fake.AssemblyInfoFile
 
+let name = "Fluent-CQRS"
+let title = "Fluent CQRS Framework"
+let description = "The next generation of CQRS Framework."
+let id = "41246c8a-9b02-4be4-83ec-c88a26ee6054"
+let authors = ["Jan Fellien"; "Carsten Koenig"]
+let tags = "CQRS, Event Sourcing, Event Sore, DDD, Domain Driven Design"
+
 let buildOutput = "./build/"
 let testBuildOutput = "./build/for_tests/"
-
+let publishDir = "./build/publish/"
 let sourceProjectDir = "Fluent-CQRS/"
 let testsProjectDir = "Fluent-CQRS.Tests/"
+let builtAssembly = name + ".dll"
 
 let version =
   match buildServer with
@@ -25,13 +33,13 @@ Target "Clean" (fun _ ->
 
 Target "Build" (fun _ ->
 
-    CreateCSharpAssemblyInfo "./Fluent-CQRS/Properties/AssemblyInfo.cs"
-        [Attribute.Title "Fluent CQRS Framework"
-         Attribute.Description "The next generation of CQRS Framework."
+    CreateCSharpAssemblyInfo ("./" + name + "/Properties/AssemblyInfo.cs")
+        [Attribute.Title title
+         Attribute.Description description
          Attribute.Company ""
          Attribute.Copyright "Copyright © Jan Fellien"
-         Attribute.Guid "41246c8a-9b02-4be4-83ec-c88a26ee6054"
-         Attribute.Product "Fluent-CQRS"
+         Attribute.Guid id
+         Attribute.Product name
          Attribute.Version version
          Attribute.FileVersion version]
 
@@ -45,18 +53,22 @@ Target "Clean BuildResults" (fun _ ->
         |> DeleteFiles 
 )
 
-//Target "Build Tests" (fun _ ->
-//
-//    !! (testsProjectDir + "*.csproj")
-//        |> MSBuildRelease testBuildOutput "Build"
-//        |> Log "AppBuild-Output: "
-//)
+Target "Package" (fun _ ->
+    CopyFiles publishDir !! (buildOutput @@ builtAssembly)
 
-//Target "Run Tests" (fun _ ->
-
-//    !! (testBuildOutput + "*Tests.dll")
-//      |> MSpec (fun p -> {p with ToolPath = mspecExePath})
-//)
+    NuGet (fun p ->
+        {p with
+            Project = name
+            Authors = authors
+            Description = description
+            Summary = description
+            Tags = tags
+            Version = version
+            OutputPath = publishDir
+            WorkingDir = publishDir
+            Files = [builtAssembly, Some "lib/portable-net40+sl50+win+wpa81+wp80", None] })
+            "package.nuspec"
+)
 
 Target "Last Step" (fun _ ->
     printf "Build with FAKE\r\n";
@@ -66,6 +78,7 @@ Target "Last Step" (fun _ ->
 "Clean"
     ==> "Build"
     ==> "Clean BuildResults"
+    ==> "Package"
     ==> "Last Step"
 
 RunTargetOrDefault "Last Step"
