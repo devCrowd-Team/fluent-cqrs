@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Fluent_CQRS.Sample.Contracts;
+using Fluent_CQRS.Extensions;
 
 namespace Fluent_CQRS.Sample.Domain
 {
-    public class SampleEventHandler
-    {
-        public void RecieveEvents(IEnumerable<IAmAnEventMessage> eventMessages)
-        {
-            eventMessages.ToList().ForEach(message => this.GetType().InvokeMember("HandleMessage", BindingFlags.InvokeMethod, null, this, new object[]{message}));
-        }
+	public class SampleEventHandler : IHandleEvents
+	{
+		public void Receive (IEnumerable<IAmAnEventMessage> eventMessages)
+		{
+			eventMessages.ToList ().ForEach (message => message.HandleMeWith (this));
+		}
 
-        public void HandleMessage(SampleEventRaised message)
-        {
-            Console.WriteLine("Event {0} empfangen: {1}", message.GetType(),message.MyValue);
-        }
-
-        
-    }
+		public void HandleMessage (SampleEventRaised message)
+		{
+			Console.WriteLine ("Event {0} empfangen: {1}", message.GetType (), message.MyValue);
+		}
+	}
 }

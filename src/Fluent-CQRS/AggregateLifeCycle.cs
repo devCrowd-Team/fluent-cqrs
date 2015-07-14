@@ -6,111 +6,99 @@ using Fluent_CQRS.Fluentation;
 
 namespace Fluent_CQRS
 {
-    internal class AggregateLifeCycle<TAggregate> : 
+	internal class AggregateLifeCycle<TAggregate> : 
         IProvideAnAggregate<TAggregate>, 
         IInvokeActionsOnAggregates<TAggregate> where TAggregate : Aggregate
-    {
-        readonly IStoreAndRetrieveEvents _eventStore;
-        readonly Action<IEnumerable<IAmAnEventMessage>> _publishMethod;
-        static TAggregate _aggregate;
+	{
+		readonly IStoreAndRetrieveEvents _eventStore;
+		readonly Action<IEnumerable<IAmAnEventMessage>> _publishMethod;
+		static TAggregate _aggregate;
 
-        public AggregateLifeCycle(IStoreAndRetrieveEvents eventStore, Action<IEnumerable<IAmAnEventMessage>> publishMethod)
-        {
-            _eventStore = eventStore;
-            _publishMethod = publishMethod;
-        }
+		public AggregateLifeCycle (IStoreAndRetrieveEvents eventStore, Action<IEnumerable<IAmAnEventMessage>> publishMethod)
+		{
+			_eventStore = eventStore;
+			_publishMethod = publishMethod;
+		}
 
-        private TAggregate AggregateInstance(IAmACommandMessage command)
-        {
-            var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), command.Id);
+		private TAggregate AggregateInstance (IAmACommandMessage command)
+		{
+			var aggregateAsObject = Activator.CreateInstance (typeof(TAggregate), command.Id);
 
-            _aggregate = ((TAggregate)aggregateAsObject);
-            return _aggregate;
-        }
+			_aggregate = ((TAggregate)aggregateAsObject);
+			return _aggregate;
+		}
 
-        public IInvokeActionsOnAggregates<TAggregate> With(IAmACommandMessage command) 
-        {
-            var aggregateEvents = _eventStore.RetrieveFor(command.Id);
+		public IInvokeActionsOnAggregates<TAggregate> With (IAmACommandMessage command)
+		{
+			var aggregateEvents = _eventStore.RetrieveFor (command.Id);
 
-            var aggregateInstance = AggregateInstance(command);
+			var aggregateInstance = AggregateInstance (command);
 
-            aggregateInstance.History = aggregateEvents;
+			aggregateInstance.History = aggregateEvents;
 
-            return this;
-        }
+			return this;
+		}
 
-        public ExecutionResult Do(Action<TAggregate> doAction)
-        {
-            var executionResult = InvokeAggregateMethod(doAction);
+		public ExecutionResult Do (Action<TAggregate> doAction)
+		{
+			var executionResult = InvokeAggregateMethod (doAction);
 
-            executionResult = StoreChanges(executionResult);
+			executionResult = StoreChanges (executionResult);
 
-            executionResult = PublishChanges(executionResult);
+			executionResult = PublishChanges (executionResult);
 
-            return executionResult;
-        }
+			return executionResult;
+		}
 
-        private ExecutionResult InvokeAggregateMethod(Action<TAggregate> doAction)
-        {
-            var executionResult= new ExecutionResult();
+		private ExecutionResult InvokeAggregateMethod (Action<TAggregate> doAction)
+		{
+			var executionResult = new ExecutionResult ();
 
-            try
-            {
-                doAction.Invoke(_aggregate);
+			try {
+				doAction.Invoke (_aggregate);
 
-                executionResult.Executed = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
+				executionResult.Executed = true;
+			} catch (Exception ex) {
+				executionResult.Error = ex;
+				return executionResult;
+			}
 
-            return executionResult;
-        }
+			return executionResult;
+		}
 
-        private ExecutionResult StoreChanges(ExecutionResult executionResult)
-        {
-            try
-            {
-                var aggregateId = _aggregate.Id;
+		private ExecutionResult StoreChanges (ExecutionResult executionResult)
+		{
+			try {
+				var aggregateId = _aggregate.Id;
 
-                _aggregate
+				_aggregate
                     .Changes
-                    .ToList()
-                    .ForEach(eventMessage =>
-                        _eventStore.StoreFor(aggregateId, eventMessage));
+                    .ToList ()
+                    .ForEach (eventMessage =>
+                        _eventStore.StoreFor (aggregateId, eventMessage));
 
-                executionResult.Saved = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
+				executionResult.Saved = true;
+			} catch (Exception ex) {
+				executionResult.Error = ex;
+				return executionResult;
+			}
 
-            return executionResult;
-        }
+			return executionResult;
+		}
 
-        private ExecutionResult PublishChanges(ExecutionResult executionResult)
-        {
-            try
-            {
-                if (_publishMethod.IsNotDefined())
-                    throw new MissingEventsPublishingTarget();
+		private ExecutionResult PublishChanges (ExecutionResult executionResult)
+		{
+			try {
+				_publishMethod (_aggregate.Changes);
+				_aggregate.Changes.Clear ();
 
-                _publishMethod(_aggregate.Changes);
-                _aggregate.Changes.Clear();
+				executionResult.Published = true;
+			} catch (Exception ex) {
+				executionResult.Error = ex;
+				return executionResult;
+			}
 
-                executionResult.Published = true;
-            }
-            catch (Exception ex)
-            {
-                executionResult.Error = ex;
-                return executionResult;
-            }
-
-            return executionResult;
-        }
-    }
+			return executionResult;
+		}
+	}
 }
