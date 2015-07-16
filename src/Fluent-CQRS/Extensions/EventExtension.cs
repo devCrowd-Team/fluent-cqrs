@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Fluent_CQRS.Extensions
 {
@@ -11,8 +12,8 @@ namespace Fluent_CQRS.Extensions
 			var handlerType = handler.GetType ();
 			var eventType = @event.GetType ();
 
-			var eventHandlerMethods = 
-				from method in handlerType.GetMethods ()
+			var eventHandlerMethods =
+                from method in handlerType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
 				from parameter in method.GetParameters ()
 				where parameter.ParameterType == eventType
 				select method;
