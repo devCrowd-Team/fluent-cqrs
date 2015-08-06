@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Runtime.ExceptionServices;
 using Fluent_CQRS.Sample.Contracts;
 
 namespace Fluent_CQRS.Sample.Domain

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fluent_CQRS
 {
@@ -16,6 +17,11 @@ namespace Fluent_CQRS
         public IEnumerable<IAmAnEventMessage> History { get; set; }
 
         public IList<IAmAnEventMessage> Changes { get; private set; }
+
+        public IEnumerable<T> MessagesOfType<T>() where T : IAmAnEventMessage
+        {
+            return History.Concat(Changes).OfType<T>(); 
+        }
 
         public String Id { get; protected internal set; }
     }
