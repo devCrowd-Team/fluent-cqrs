@@ -54,4 +54,39 @@ This is simple. You assign any Event Handler you like by chaining it by the `And
     
 now all your cool Event Handlers receiving all changes of an aggregate.
 
+---
+
+All right... In some cases you want to save an event only once, 
+but if you add the event into the list of Changes like this: 
+   
+   class CoolAggregate() : Aggregate
+   {
+      ...
+      public void DoSomethingHelpful()
+	  {
+	     Changes.Add(new SomethingHappend());
+	  }
+      ...
+   }
+
+the event will save everytime. Bad, very bad. Here comes the hero 'Replay' ...
+
+   class CoolAggregate() : Aggregate
+   {
+      ...
+      public void DoSomethingHelpful()
+	  {
+	     if(MessagesOfType<SomethingHappend>().Any)
+		 {
+		    Replay(new SomethingHappend());
+		 }
+		 else
+		 {
+		    Changes.Add(new SomethingHappend());
+		 }
+	  }
+      ...
+   }
+
+The 'Replay' method prevents you for multiple equals events.
 

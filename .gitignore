@@ -260,3 +260,12 @@ bin/
 obj/
 *.userprefs
 
+##Paket
+paket.lock
+
+##FAKE
+.fake/
+
+##Expected Files
+!tools/NuGet/nuget.exe
+

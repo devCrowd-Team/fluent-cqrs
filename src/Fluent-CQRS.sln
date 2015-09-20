@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{F6610365-3D1C-4247-92DE-E5A8017645A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{1B3DBE80-9EEB-4BC3-8032-E3984BF73CFF}"
@@ -13,16 +15,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent-CQRS.Sample.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent-CQRS.Sample.Contracts", "Fluent-CQRS.Sample.Contracts\Fluent-CQRS.Sample.Contracts.csproj", "{00396ADD-73D9-46CF-B7A0-A74CAE5F92D2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E2BA206-EA7C-4AED-9E92-CDF21AA20B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent-CQRS.Tests", "Fluent-CQRS.Tests\Fluent-CQRS.Tests.csproj", "{B78C9B6E-CEF1-4361-BD26-F62F73A51188}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_project", "_project", "{5463B768-5B4F-49BC-B502-0EE0CC97A156}"
 	ProjectSection(SolutionItems) = preProject
-		build-solution.fsx = build-solution.fsx
-		build.bat = build.bat
+		..\scripts\build-solution.fsx = ..\scripts\build-solution.fsx
+		..\build.bat = ..\build.bat
 		..\LICENSE = ..\LICENSE
 		package.nuspec = package.nuspec
+		..\paket.dependencies = ..\paket.dependencies
 		..\README.md = ..\README.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent-CQRS.Tests", "Fluent-CQRS.Tests\Fluent-CQRS.Tests.csproj", "{B78C9B6E-CEF1-4361-BD26-F62F73A51188}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
