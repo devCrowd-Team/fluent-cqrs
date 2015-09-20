@@ -1,0 +1,7 @@
+source https://nuget.org/api/v2
+
+nuget FAKE
+nuget Paket
+nuget FluentAssertions = 3.5.0
+nuget Nunit = 2.6.4
+nuget Nunit.Runners
