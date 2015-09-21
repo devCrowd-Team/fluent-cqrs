@@ -268,4 +268,5 @@ paket.lock
 
 ##Expected Files
 !tools/NuGet/nuget.exe
+!tools/Paket/paket.exe
 
