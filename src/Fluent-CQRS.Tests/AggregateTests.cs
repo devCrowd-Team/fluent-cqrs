@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Fluent_CQRS.Extensions;
 using Fluent_CQRS.Tests.Infrastructure;
 using NUnit.Framework;
 
@@ -68,6 +69,44 @@ namespace Fluent_CQRS.Tests
             aggregateEvents.OfType<SomethingHappendOnce>().Count().Should().Be(1);
 
             _eventHandler.RecievedEvents.OfType<SomethingHappendOnce>().Count().Should().Be(2);
+        }
+
+        [Test]
+        [ExpectedException(
+            ExpectedException = typeof(ApplicationException),
+            ExpectedMessage = "This is a intentionally Exception")]
+        public void When_throw_an_Exception_within_the_aggregate_it_should_catched_in_OnException_method()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Do(aggregate => aggregate.ThrowException())
+                .OnException(exception =>
+                {
+                    throw exception;
+                });
+        }
+
+        [Test]
+        [ExpectedException(
+            ExpectedException = typeof(BusinessFault),
+            ExpectedMessage = "My BusinessFault")]
+        public void When_throw_a_Fault_within_the_aggregate_it_should_catched_in_OnFault_method()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Do(aggregate => aggregate.ThrowFault())
+                .OnFault(fault =>
+                {
+                    throw fault;
+                });
         }
     }
 }

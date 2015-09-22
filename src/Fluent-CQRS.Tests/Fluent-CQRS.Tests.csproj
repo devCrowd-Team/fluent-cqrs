@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateTests.cs" />
+    <Compile Include="Infrastructure\BusinessFault.cs" />
     <Compile Include="Infrastructure\SomethingHappend.cs" />
     <Compile Include="Infrastructure\SomethingHappendOnce.cs" />
     <Compile Include="Infrastructure\TestAggregate.cs" />

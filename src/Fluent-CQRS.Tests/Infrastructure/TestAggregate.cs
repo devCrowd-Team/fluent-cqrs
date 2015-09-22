@@ -27,5 +27,15 @@ namespace Fluent_CQRS.Tests.Infrastructure
                 Changes.Add(new SomethingHappendOnce());                
             }
         }
+
+        public void ThrowException()
+        {
+            throw new ApplicationException("This is a intentionally Exception");
+        }
+
+        public void ThrowFault()
+        {
+            throw new BusinessFault();
+        }
     }
 }

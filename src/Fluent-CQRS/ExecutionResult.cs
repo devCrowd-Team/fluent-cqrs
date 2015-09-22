@@ -4,7 +4,9 @@ namespace Fluent_CQRS
 {
     public class ExecutionResult
     {
-        public Exception Error { get; set; }
+        public Exception Exception { get; set; }
+
+        public Fault Fault { get; set; }
 
         public bool Executed { get; set; }
 

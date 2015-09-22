@@ -54,13 +54,20 @@ namespace Fluent_CQRS
 		{
 			var executionResult = new ExecutionResult ();
 
-			try {
-				doAction.Invoke (_aggregate);
+		    try
+		    {
+		        doAction.Invoke(_aggregate);
 
-				executionResult.Executed = true;
-			} catch (Exception ex) {
-				executionResult.Error = ex;
-				return executionResult;
+		        executionResult.Executed = true;
+
+		    }
+		    catch (Fault fault)
+		    {
+		        executionResult.Fault = fault;
+		    }
+            catch (Exception ex) {
+
+				executionResult.Exception = ex;
 			}
 
 			return executionResult;
@@ -78,7 +85,7 @@ namespace Fluent_CQRS
 
 				executionResult.Saved = true;
 			} catch (Exception ex) {
-				executionResult.Error = ex;
+				executionResult.Exception = ex;
 				return executionResult;
 			}
 
@@ -96,7 +103,7 @@ namespace Fluent_CQRS
                 
 				executionResult.Published = true;
 			} catch (Exception ex) {
-				executionResult.Error = ex;
+				executionResult.Exception = ex;
 				return executionResult;
 			}
 

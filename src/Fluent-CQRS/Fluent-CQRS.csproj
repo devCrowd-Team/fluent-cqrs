@@ -96,6 +96,7 @@
     <Compile Include="EventHandlers.cs" />
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\ExecutionResultExtension.cs" />
+    <Compile Include="Fault.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
     <Compile Include="IAmACommandMessage.cs" />
