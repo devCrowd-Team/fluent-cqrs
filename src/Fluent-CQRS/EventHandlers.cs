@@ -19,7 +19,10 @@ namespace Fluent_CQRS
 
 		public void Receive (IEnumerable<IAmAnEventMessage> events)
 		{
-			_receiver.ToList ().ForEach (receiver => receiver.Receive (events));
+		    foreach (var receiver in _receiver)
+		    {
+		        receiver.Receive (events);
+		    }
 		}
 
 		public IConcatenateEventHandler And (IHandleEvents eventHandler)

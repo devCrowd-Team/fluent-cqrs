@@ -71,11 +71,10 @@ namespace Fluent_CQRS
 			try {
 				var aggregateId = _aggregate.Id;
 
-				_aggregate
-                    .Changes
-                    .ToList ()
-                    .ForEach (eventMessage =>
-                        _eventStore.StoreFor (aggregateId, eventMessage));
+			    foreach (var eventMessage in _aggregate.Changes)
+			    {
+			        _eventStore.StoreFor(aggregateId, eventMessage);
+			    }
 
 				executionResult.Saved = true;
 			} catch (Exception ex) {
