@@ -88,7 +88,7 @@ Target "Package" (fun _ ->
             Version = version
             OutputPath = publishDir
             WorkingDir = publishDir
-            Files = [builtAssembly, Some "lib/net45", None] })
+            Files = [builtAssembly, Some "lib/portable-net45+netcore45+wpa81", None] })
             "src/package.nuspec"
 )
 
