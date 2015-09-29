@@ -80,7 +80,7 @@ namespace Fluent_CQRS
 
 			    foreach (var eventMessage in _aggregate.Changes)
 			    {
-			        _eventStore.StoreFor(aggregateId, eventMessage);
+			        _eventStore.StoreFor<TAggregate>(aggregateId, eventMessage);
 			    }
 
 				executionResult.Saved = true;

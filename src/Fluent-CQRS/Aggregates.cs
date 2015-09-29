@@ -31,9 +31,19 @@ namespace Fluent_CQRS
 			return _eventHandlers;
 		}
 
+        public ICollectEvents ReplayAllEventsFor<TAggregate>() where TAggregate : Aggregate
+	    {
+	        return new PlaybackEvents<TAggregate>(_eventStore, ReplayCallback);
+	    }
+
 		private void NewStateCallback (IEnumerable<IAmAnEventMessage> events)
 		{
 			_eventHandlers.Receive (events);
 		}
+
+        private void ReplayCallback(IEnumerable<IAmAnEventMessage> events)
+        {
+            _eventHandlers.Receive(events);
+        }
 	}
 }

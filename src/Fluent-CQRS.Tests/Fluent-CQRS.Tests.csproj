@@ -51,10 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregatesRepositoryTests.cs" />
     <Compile Include="AggregateTests.cs" />
+    <Compile Include="Infrastructure\AlternativeTestAggregate.cs" />
+    <Compile Include="Infrastructure\AlternativeTestEventHandler.cs" />
     <Compile Include="Infrastructure\BusinessFault.cs" />
     <Compile Include="Infrastructure\SomethingHappend.cs" />
     <Compile Include="Infrastructure\SomethingHappendOnce.cs" />
+    <Compile Include="Infrastructure\SomtethingSpecialHappend.cs" />
     <Compile Include="Infrastructure\TestAggregate.cs" />
     <Compile Include="Infrastructure\TestCommand.cs" />
     <Compile Include="Infrastructure\TestEventHandler.cs" />

@@ -9,7 +9,7 @@ namespace Fluent_CQRS.Tests
         internal Aggregates _aggregates;
         internal TestEventHandler _eventHandler;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void Setup()
         {
             _eventStore = new InMemoryEventStore();

@@ -7,7 +7,8 @@ namespace Fluent_CQRS.Tests.Infrastructure
 {
     class TestAggregate : Aggregate
     {
-        public TestAggregate(string id) : base(id)
+        public TestAggregate(string id)
+            : base(id)
         {
         }
 
@@ -24,7 +25,7 @@ namespace Fluent_CQRS.Tests.Infrastructure
             }
             else
             {
-                Changes.Add(new SomethingHappendOnce());                
+                Changes.Add(new SomethingHappendOnce());
             }
         }
 
@@ -36,6 +37,29 @@ namespace Fluent_CQRS.Tests.Infrastructure
         public void ThrowFault()
         {
             throw new BusinessFault();
+        }
+
+        public void DoFourActions()
+        {
+            Changes.Add(new SomtethingSpecialHappend
+            {
+                NiceProperty = "Test1"
+            });
+
+            Changes.Add(new SomtethingSpecialHappend
+            {
+                NiceProperty = "Test2"
+            });
+
+            Changes.Add(new SomtethingSpecialHappend
+            {
+                NiceProperty = "Test3"
+            });
+
+            Changes.Add(new SomtethingSpecialHappend
+            {
+                NiceProperty = "Test4"
+            });
         }
     }
 }

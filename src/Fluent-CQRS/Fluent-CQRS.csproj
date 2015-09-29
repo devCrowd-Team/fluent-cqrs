@@ -101,10 +101,13 @@
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
     <Compile Include="IAmACommandMessage.cs" />
     <Compile Include="IAmAnEventMessage.cs" />
+    <Compile Include="ICollectEvents.cs" />
     <Compile Include="IConcatenateEventHandler.cs" />
     <Compile Include="InMemoryEventStore.cs" />
+    <Compile Include="IReplayEvents.cs" />
     <Compile Include="IStoreAndRetrieveEvents.cs" />
     <Compile Include="MissingEventsPublishingTarget.cs" />
+    <Compile Include="PlaybackEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IHandleEvents.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
