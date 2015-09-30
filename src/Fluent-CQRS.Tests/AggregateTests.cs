@@ -75,7 +75,7 @@ namespace Fluent_CQRS.Tests
         [ExpectedException(
             ExpectedException = typeof(ApplicationException),
             ExpectedMessage = "This is a intentionally Exception")]
-        public void When_throw_an_Exception_within_the_aggregate_it_should_catched_in_OnException_method()
+        public void When_throw_an_Exception_within_the_aggregate_it_should_not_be_catched_by_default()
         {
             var testCommand = new TestCommand
             {
@@ -83,8 +83,24 @@ namespace Fluent_CQRS.Tests
             };
 
             _aggregates.Provide<TestAggregate>().With(testCommand)
-                .Do(aggregate => aggregate.ThrowException())
-                .OnException(exception =>
+                .Do(aggregate => aggregate.ThrowException());
+         
+        }
+
+        [Test]
+        [ExpectedException(
+           ExpectedException = typeof(ApplicationException),
+           ExpectedMessage = "This is a intentionally Exception")]
+        public void When_throw_an_Exception_within_the_aggregate_it_can_be_catched_in_CatchException_method()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException())
+                .CatchException(exception =>
                 {
                     throw exception;
                 });
@@ -94,7 +110,7 @@ namespace Fluent_CQRS.Tests
         [ExpectedException(
             ExpectedException = typeof(BusinessFault),
             ExpectedMessage = "My BusinessFault")]
-        public void When_throw_a_Fault_within_the_aggregate_it_should_catched_in_OnFault_method()
+        public void When_throw_a_Fault_within_the_aggregate_it_should_catched_in_CatchFault_method()
         {
             var testCommand = new TestCommand
             {
@@ -102,8 +118,8 @@ namespace Fluent_CQRS.Tests
             };
 
             _aggregates.Provide<TestAggregate>().With(testCommand)
-                .Do(aggregate => aggregate.ThrowFault())
-                .OnFault(fault =>
+                .Try(aggregate => aggregate.ThrowFault())
+                .CatchFault(fault =>
                 {
                     throw fault;
                 });
