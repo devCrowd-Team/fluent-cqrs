@@ -27,8 +27,8 @@ Why fluent? Just look at this:
 		  _aggregates
 			   .Provide<[AnAggregateYouLike]>
 			   .With(command.AggregateId)
-			   .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-			   .OnError(exception=> handleThis(exception));
+			   .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+			   .CatchException(exception=> handleThis(exception));
 
       }
     }
