@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fluent_CQRS
 {
@@ -30,6 +31,12 @@ namespace Fluent_CQRS
         public void ToAllEventHandlers()
         {
             _replayCallback(_currentAggregateEvents);
+        }
+
+        public IReplayEvents OfMessageType<TEvent>() where TEvent : IAmAnEventMessage
+        {
+            _currentAggregateEvents = _currentAggregateEvents.OfType<TEvent>() as IEnumerable<IAmAnEventMessage> ;
+            return this;
         }
     }
 }

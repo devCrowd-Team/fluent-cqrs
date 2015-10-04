@@ -78,7 +78,7 @@ namespace Fluent_CQRS.Tests
 
             _aggregates
                 .Provide<AlternativeTestAggregate>()
-                .With(new TestCommand {Id = aggrId})
+                .With(new TestCommand { Id = aggrId })
                 .Do(aggr => aggr.DoAlsoSomething());
 
             _eventStore.RetrieveFor(aggrId).Count().Should().Be(5);
@@ -91,6 +91,38 @@ namespace Fluent_CQRS.Tests
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(4);
+        }
+
+
+        [Test]
+        public void When_replay_Events_of_only_one_type_it_should_ignore_all_other()
+        {
+            var aggrId = "TestAggr";
+
+            _aggregates
+                .PublishNewStateTo(_eventHandler);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomethingOnce());
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomething());
+
+            _eventStore.RetrieveFor(aggrId).Count().Should().Be(2);
+
+            _eventHandler.RecievedEvents.Clear();
+
+            _aggregates
+                .ReplayAllEventsFor<TestAggregate>()
+                .WithId(aggrId)
+                .OfMessageType<SomethingHappend>()
+                .ToAllEventHandlers();
+
+            _eventHandler.RecievedEvents.Count.Should().Be(1);
         }
     }
 }
