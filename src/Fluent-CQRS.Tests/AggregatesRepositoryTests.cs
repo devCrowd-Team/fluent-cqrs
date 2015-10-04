@@ -30,8 +30,8 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .WithId(aggrId)
+                .ReplayFor<TestAggregate>()
+                .EventsWithAggregateId(aggrId)
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(4);
@@ -53,8 +53,8 @@ namespace Fluent_CQRS.Tests
             var alternativeEventHandler = new AlternativeTestEventHandler();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .WithId(aggrId)
+                .ReplayFor<TestAggregate>()
+                .EventsWithAggregateId(aggrId)
                 .To(alternativeEventHandler);
 
             _eventHandler.RecievedEvents.Count.Should().Be(4);
@@ -86,8 +86,8 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .WithId(aggrId)
+                .ReplayFor<TestAggregate>()
+                .EventsWithAggregateId(aggrId)
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(4);
@@ -117,9 +117,9 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .WithId(aggrId)
-                .OfMessageType<SomethingHappend>()
+                .ReplayFor<TestAggregate>()
+                .EventsWithAggregateId(aggrId)
+                .OfType<SomethingHappend>()
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(1);
@@ -150,8 +150,8 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .All()
+                .ReplayFor<TestAggregate>()
+                .AllEvents()
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(2);
@@ -180,8 +180,8 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayEventsFor<TestAggregate>()
-                .All()
+                .ReplayFor<TestAggregate>()
+                .AllEvents()
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(1);

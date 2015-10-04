@@ -45,22 +45,22 @@ namespace Fluent_CQRS.Tests.Infrastructure
 
         public void DoFourActions()
         {
-            Changes.Add(new SomtethingSpecialHappend
+            Changes.Add(new SomethingSpecialHappend
             {
                 NiceProperty = "Test1"
             });
 
-            Changes.Add(new SomtethingSpecialHappend
+            Changes.Add(new SomethingSpecialHappend
             {
                 NiceProperty = "Test2"
             });
 
-            Changes.Add(new SomtethingSpecialHappend
+            Changes.Add(new SomethingSpecialHappend
             {
                 NiceProperty = "Test3"
             });
 
-            Changes.Add(new SomtethingSpecialHappend
+            Changes.Add(new SomethingSpecialHappend
             {
                 NiceProperty = "Test4"
             });

@@ -16,14 +16,14 @@ namespace Fluent_CQRS
             _replayCallback = replayCallback;
         }
 
-        public IReplayEvents WithId(string aggregateId)
+        public IReplayEvents EventsWithAggregateId(string aggregateId)
         {
             _currentAggregateEvents = _eventStore.RetrieveFor<TAggregate>(aggregateId);
 
             return this;
         }
 
-        public IReplayEvents All()
+        public IReplayEvents AllEvents()
         {
             _currentAggregateEvents = _eventStore.RetrieveFor<TAggregate>();
 
@@ -40,7 +40,7 @@ namespace Fluent_CQRS
             _replayCallback(_currentAggregateEvents);
         }
 
-        public IReplayEvents OfMessageType<TEvent>() where TEvent : IAmAnEventMessage
+        public IReplayEvents OfType<TEvent>() where TEvent : IAmAnEventMessage
         {
             _currentAggregateEvents = _currentAggregateEvents.OfType<TEvent>() as IEnumerable<IAmAnEventMessage> ;
             return this;
