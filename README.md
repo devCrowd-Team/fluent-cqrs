@@ -107,7 +107,7 @@ Nice, realy nice... But what if you want to replay all Events of an Aggregate? Y
 To replay all Events of an Aggregate code this:
 
     _aggregates
-        ReplayAllEventsFor<[AnAggregateYouLike]>()
+        .ReplayEventsFor<[AnAggregateYouLike]>()
         .WithId(aggrId)
         .ToAllEventHandlers();
 
@@ -115,11 +115,29 @@ This published all Events of the Aggregate with the given ID to all registered E
 If you want to publish to only one special Event Handler change your Code to:
 
     _aggregates
-        ReplayAllEventsFor<[AnAggregateYouLike]>()
+        .ReplayEventsFor<[AnAggregateYouLike]>()
         .WithId(aggrId)
         .To([OneOfYourEventHandler]);
 
 This ist simple, as well.
+
+
+You can also replay events of an aggregate type:
+
+    _aggregates
+        .ReplayEventsFor<[AnAggregateYouLike]>()
+        .All()
+        .ToAllEventHandlers();
+
+
+You can also filter for certain event messages:
+
+    _aggregates
+        .ReplayEventsFor<[AnAggregateYouLike]>()
+        .All()
+		.OfMessageType<SomethingHappend>()
+        .ToAllEventHandlers();
+
 
 ---
 ~tbc
