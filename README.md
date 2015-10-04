@@ -2,8 +2,8 @@
 "The Next Generation" CQRS Framework for .Net applications
 
 ### Attenzione Attenzione: 
-There is an **Api break**. The method `OnError` was splitted into `OnException` 
-(raised by unexpected System Exceptions) and `OnFault` (raised by Business Faults)
+There is an **Api break**. The method `OnError` was splitted into `CatchException` 
+(raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults)
 
 ---
 
