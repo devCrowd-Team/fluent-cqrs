@@ -23,6 +23,13 @@ namespace Fluent_CQRS
             return this;
         }
 
+        public IReplayEvents All()
+        {
+            _currentAggregateEvents = _eventStore.RetrieveFor<TAggregate>();
+
+            return this;
+        }
+
         public void To(IHandleEvents eventHandler)
         {
             eventHandler.Receive(_currentAggregateEvents);

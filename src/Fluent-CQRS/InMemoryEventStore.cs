@@ -43,5 +43,15 @@ namespace Fluent_CQRS
                 .Select(eventBag => eventBag.Event)
                 .ToArray();
         }
+
+        public IEnumerable<IAmAnEventMessage> RetrieveFor<TAggregate>()
+          where TAggregate : Aggregate
+        {
+            return _events
+                .Where(eventMessage =>
+                    eventMessage.TypeOfAggregate == typeof(TAggregate))
+                .Select(eventBag => eventBag.Event)
+                .ToArray();
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace Fluent_CQRS
 			return _eventHandlers;
 		}
 
-        public ICollectEvents ReplayAllEventsFor<TAggregate>() where TAggregate : Aggregate
+        public ICollectEvents ReplayEventsFor<TAggregate>() where TAggregate : Aggregate
 	    {
 	        return new PlaybackEvents<TAggregate>(_eventStore, ReplayCallback);
 	    }
