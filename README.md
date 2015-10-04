@@ -3,7 +3,7 @@
 
 ### Attenzione Attenzione:
 There is an **Api break**. The method `OnError` was splitted into `CatchException`
-(raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults)
+(raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults).
 By default 'Do' throws all exceptions directly. Use 'Try' for catching errors.
 
 ---
@@ -26,23 +26,23 @@ Why fluent? Just look at this:
                 .With(command.AggregateId)
                 .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data));
 
-		    // You want it with exception handling?
-		    // Lets do it
+            // You want it with exception handling?
+            // Lets do it
 
-		    _aggregates
-			    .Provide<[AnAggregateYouLike]>
-			    .With(command.AggregateId)
-			    .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-			    .CatchException(exception=> handleThis(exception));
+            _aggregates
+                .Provide<[AnAggregateYouLike]>
+                .With(command.AggregateId)
+                .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+                .CatchException(exception=> handleThis(exception));
 
-			// And here a very simple way to catch business faults which thrown within the Aggregate
+            // And here a very simple way to catch business faults which thrown within the Aggregate
 
-			_aggregates
-			    .Provide<[AnAggregateYouLike]>
-			    .With(command.AggregateId)
-			    .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-			    .CatchFault(fault=> handleThis(fault))
-				  .CatchException(exception => handleThis(exception));
+            _aggregates
+                .Provide<[AnAggregateYouLike]>
+                .With(command.AggregateId)
+                .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+                .CatchFault(fault=> handleThis(fault))
+                .CatchException(exception => handleThis(exception));
         }
     }
 
@@ -121,7 +121,6 @@ If you want to publish to only one special Event Handler change your Code to:
 
 This ist simple, as well.
 
-
 You can also replay events of an aggregate type:
 
     _aggregates
@@ -129,15 +128,13 @@ You can also replay events of an aggregate type:
         .AllEvents()
         .ToAllEventHandlers();
 
-
 You can also filter for certain event messages:
 
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .AllEvents()
-		    .OfType<[AnEvent]>()
+        .OfType<[AnEvent]>()
         .ToAllEventHandlers();
-
 
 ---
 ~tbc
