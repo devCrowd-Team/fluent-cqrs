@@ -4,5 +4,6 @@
     {
         void To(IHandleEvents eventHandler);
         void ToAllEventHandlers();
+        IReplayEvents OfMessageType<T>() where T:IAmAnEventMessage;
     }
 }

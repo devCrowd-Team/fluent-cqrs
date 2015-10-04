@@ -30,7 +30,7 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayAllEventsFor<TestAggregate>()
+                .ReplayEventsFor<TestAggregate>()
                 .WithId(aggrId)
                 .ToAllEventHandlers();
 
@@ -53,7 +53,7 @@ namespace Fluent_CQRS.Tests
             var alternativeEventHandler = new AlternativeTestEventHandler();
 
             _aggregates
-                .ReplayAllEventsFor<TestAggregate>()
+                .ReplayEventsFor<TestAggregate>()
                 .WithId(aggrId)
                 .To(alternativeEventHandler);
 
@@ -78,7 +78,7 @@ namespace Fluent_CQRS.Tests
 
             _aggregates
                 .Provide<AlternativeTestAggregate>()
-                .With(new TestCommand {Id = aggrId})
+                .With(new TestCommand { Id = aggrId })
                 .Do(aggr => aggr.DoAlsoSomething());
 
             _eventStore.RetrieveFor(aggrId).Count().Should().Be(5);
@@ -86,11 +86,105 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Clear();
 
             _aggregates
-                .ReplayAllEventsFor<TestAggregate>()
+                .ReplayEventsFor<TestAggregate>()
                 .WithId(aggrId)
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(4);
+        }
+
+
+        [Test]
+        public void When_replay_Events_of_only_one_type_it_should_ignore_all_other()
+        {
+            var aggrId = "TestAggr";
+
+            _aggregates
+                .PublishNewStateTo(_eventHandler);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomethingOnce());
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomething());
+
+            _eventStore.RetrieveFor(aggrId).Count().Should().Be(2);
+
+            _eventHandler.RecievedEvents.Clear();
+
+            _aggregates
+                .ReplayEventsFor<TestAggregate>()
+                .WithId(aggrId)
+                .OfMessageType<SomethingHappend>()
+                .ToAllEventHandlers();
+
+            _eventHandler.RecievedEvents.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void When_replay_Events_it_should_replay_all_events_for_aggregate_type()
+        {
+            var aggrId = "TestAggr";
+            var otherAggrId = "OtherTestAggr";
+
+            _aggregates
+                .PublishNewStateTo(_eventHandler);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomething());
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = otherAggrId })
+                .Do(aggr => aggr.DoSomething());
+
+            _eventStore.RetrieveFor(aggrId).Count().Should().Be(1);
+            _eventStore.RetrieveFor(otherAggrId).Count().Should().Be(1);
+
+            _eventHandler.RecievedEvents.Clear();
+
+            _aggregates
+                .ReplayEventsFor<TestAggregate>()
+                .All()
+                .ToAllEventHandlers();
+
+            _eventHandler.RecievedEvents.Count.Should().Be(2);
+        }
+
+        [Test]
+        public void When_replay_Events_it_should_replay_only_events_for_that_aggregate_type()
+        {
+            var aggrId = "TestAggr";
+
+            _aggregates
+                .PublishNewStateTo(_eventHandler);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoSomething());
+
+            _aggregates
+                .Provide<AlternativeTestAggregate>()
+                .With(new TestCommand { Id = aggrId })
+                .Do(aggr => aggr.DoAlsoSomething());
+
+            _eventStore.RetrieveFor(aggrId).Count().Should().Be(2);
+
+            _eventHandler.RecievedEvents.Clear();
+
+            _aggregates
+                .ReplayEventsFor<TestAggregate>()
+                .All()
+                .ToAllEventHandlers();
+
+            _eventHandler.RecievedEvents.Count.Should().Be(1);
         }
     }
 }
