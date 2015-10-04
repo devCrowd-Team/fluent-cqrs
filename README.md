@@ -32,7 +32,7 @@ Why fluent? Just look at this:
 			    .Provide<[AnAggregateYouLike]>
 			    .With(command.AggregateId)
 			    .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-			    .CatchError(exception=> handleThis(exception));
+			    .CatchException(exception=> handleThis(exception));
 
 			// And here a very simple way to catch business faults which thrown within the Aggregate
 
