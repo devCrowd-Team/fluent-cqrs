@@ -18,8 +18,8 @@ namespace Fluent_CQRS.Sample.Domain
             Console.WriteLine("Command {0} recieved: {1}", command.Id, command.MyValue);
 
             _aggregates.Provide<SampleAggregate>().With(command)
-                .Do(aggregate => aggregate.SampleAggregateMethod(command.MyValue))
-                .OnException(Console.WriteLine);
+                .Try(aggregate => aggregate.SampleAggregateMethod(command.MyValue))
+                .CatchException(Console.WriteLine);
         }
     }
 }

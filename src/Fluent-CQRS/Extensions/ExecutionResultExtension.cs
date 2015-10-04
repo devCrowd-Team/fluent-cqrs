@@ -4,7 +4,7 @@ namespace Fluent_CQRS.Extensions
 {
     public static class ExecutionResultExtension
     {
-        public static void OnException(this ExecutionResult result, Action<Exception> handle)
+        public static void CatchException(this ExecutionResult result, Action<Exception> handle)
         {
             if (result.Exception == null)
                 return;
@@ -12,7 +12,7 @@ namespace Fluent_CQRS.Extensions
             handle(result.Exception);
         }
 
-        public static ExecutionResult OnFault(this ExecutionResult result, Action<Fault> handle)
+        public static ExecutionResult CatchFault(this ExecutionResult result, Action<Fault> handle)
         {
             if (result.Fault != null)
             {
@@ -20,6 +20,11 @@ namespace Fluent_CQRS.Extensions
             }
 
             return result;
+        }
+
+        public static bool HasErrors(this ExecutionResult result)
+        {
+            return result.Exception != null || result.Fault != null;
         }
     }
 }

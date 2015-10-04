@@ -24,9 +24,9 @@ namespace Fluent_CQRS.Tests
             _aggregates.Provide<TestAggregate>().With(testCommand)
                 .Do(aggregate => aggregate.DoSomething());
 
-            var aggrigateEvents = _eventStore.RetrieveFor(testCommand.Id);
+            var aggregateEvents = _eventStore.RetrieveFor(testCommand.Id);
 
-            aggrigateEvents.OfType<SomethingHappend>().Count().Should().Be(1);
+            aggregateEvents.OfType<SomethingHappend>().Count().Should().Be(1);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Fluent_CQRS.Tests
         [ExpectedException(
             ExpectedException = typeof(ApplicationException),
             ExpectedMessage = "This is a intentionally Exception")]
-        public void When_throw_an_Exception_within_the_aggregate_it_should_catched_in_OnException_method()
+        public void When_throw_an_Exception_within_the_aggregate_it_should_catched_in_CatchException_method()
         {
             var testCommand = new TestCommand
             {
@@ -83,8 +83,8 @@ namespace Fluent_CQRS.Tests
             };
 
             _aggregates.Provide<TestAggregate>().With(testCommand)
-                .Do(aggregate => aggregate.ThrowException())
-                .OnException(exception =>
+                .Try(aggregate => aggregate.ThrowException())
+                .CatchException(exception =>
                 {
                     throw exception;
                 });
@@ -94,7 +94,7 @@ namespace Fluent_CQRS.Tests
         [ExpectedException(
             ExpectedException = typeof(BusinessFault),
             ExpectedMessage = "My BusinessFault")]
-        public void When_throw_a_Fault_within_the_aggregate_it_should_catched_in_OnFault_method()
+        public void When_throw_a_Fault_within_the_aggregate_it_should_catched_in_CatchFault_method()
         {
             var testCommand = new TestCommand
             {
@@ -102,11 +102,144 @@ namespace Fluent_CQRS.Tests
             };
 
             _aggregates.Provide<TestAggregate>().With(testCommand)
-                .Do(aggregate => aggregate.ThrowFault())
-                .OnFault(fault =>
+                .Try(aggregate => aggregate.ThrowFault())
+                .CatchFault(fault =>
                 {
                     throw fault;
                 });
+        }
+
+        [Test]
+        [ExpectedException(
+            ExpectedException = typeof(ApplicationException),
+            ExpectedMessage = "This is a intentionally Exception")]
+        public void When_throw_an_Exception_within_the_aggregate_it_should_not_catched_by_default()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Do(aggregate => aggregate.ThrowException());
+        }
+
+        [Test]
+        [ExpectedException(
+            ExpectedException = typeof(BusinessFault),
+            ExpectedMessage = "My BusinessFault")]
+        public void When_throw_a_Fault_within_the_aggregate_it_should_not_catched_by_default()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Do(aggregate => aggregate.ThrowFault());
+        }
+
+        [Test]
+        public void When_throw_an_Exception_within_the_aggregate_it_should_returned_by_execution_result()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            var executionResult = _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException());
+
+            executionResult.Exception.Should().BeOfType<ApplicationException>();
+            executionResult.Exception.Message.Should().Be("This is a intentionally Exception");
+
+        }
+
+        [Test]
+        public void When_throw_a_Fault_within_the_aggregate_it_should_returnes_by_execution_result()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            var executionResult = _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowFault());
+
+            executionResult.Fault.Should().BeOfType<BusinessFault>();
+            executionResult.Fault.Message.Should().Be("My BusinessFault");
+
+        }
+
+        [Test]
+        public void When_throw_an_Exception_within_the_aggregate_it_should_not_saved_any_changes()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException());
+
+             _eventStore
+                 .RetrieveFor(testCommand.Id)
+                 .OfType<SomethingHappend>()
+                 .Count().Should().Be(0);
+
+        }
+
+        [Test]
+        public void When_throw_an_Fault_within_the_aggregate_it_should_not_saved_any_changes()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException());
+
+            _eventStore
+                .RetrieveFor(testCommand.Id)
+                .OfType<SomethingHappend>()
+                .Count().Should().Be(0);
+
+        }
+
+        [Test]
+        public void When_throw_an_Exception_within_the_aggregate_it_should_not_published_any_event()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+            
+            _aggregates.PublishNewStateTo(_eventHandler);
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException());
+
+            _eventHandler.RecievedEvents.Count.Should().Be(0);
+
+        }
+
+        [Test]
+        public void When_throw_an_Fault_within_the_aggregate_it_should_not_published_any_event()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
+
+            _aggregates.PublishNewStateTo(_eventHandler);
+
+            _aggregates.Provide<TestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.ThrowException());
+
+            _eventHandler.RecievedEvents.Count.Should().Be(0);
+
+
         }
     }
 }

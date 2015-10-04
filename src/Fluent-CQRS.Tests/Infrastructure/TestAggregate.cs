@@ -31,11 +31,15 @@ namespace Fluent_CQRS.Tests.Infrastructure
 
         public void ThrowException()
         {
+            Changes.Add(new SomethingHappend());
+
             throw new ApplicationException("This is a intentionally Exception");
         }
 
         public void ThrowFault()
         {
+            Changes.Add(new SomethingHappend());
+
             throw new BusinessFault();
         }
 

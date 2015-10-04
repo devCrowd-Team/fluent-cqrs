@@ -31,8 +31,17 @@ Why fluent? Just look at this:
 		    _aggregates
 			    .Provide<[AnAggregateYouLike]>
 			    .With(command.AggregateId)
-			    .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
-			    .OnError(exception=> handleThis(exception));
+			    .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+			    .CatchError(exception=> handleThis(exception));
+
+			// And here a very simple way to catch business faults which thrown within the Aggregate
+
+			_aggregates
+			    .Provide<[AnAggregateYouLike]>
+			    .With(command.AggregateId)
+			    .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
+			    .CatchFault(fault=> handleThis(fault))
+				.CatchException(exception => handleThis(exception));
 
         }
     }
