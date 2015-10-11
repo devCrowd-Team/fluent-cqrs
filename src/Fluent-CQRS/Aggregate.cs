@@ -6,16 +6,16 @@ namespace Fluent_CQRS
 {
     public class Aggregate
     {
-        public Aggregate(String id)
+        public Aggregate(String id, IEnumerable<IAmAnEventMessage> history)
         {
             Changes = new List<IAmAnEventMessage>();
-            History = new List<IAmAnEventMessage>();
+            History = new List<IAmAnEventMessage>(history);
             EventsToReplay = new List<IAmAnEventMessage>();
             
             Id = id;
         }
 
-        public IEnumerable<IAmAnEventMessage> History { get; set; }
+        public IEnumerable<IAmAnEventMessage> History { get; private set; }
 
         public IList<IAmAnEventMessage> Changes { get; private set; }
 

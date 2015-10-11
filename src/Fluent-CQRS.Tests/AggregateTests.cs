@@ -238,8 +238,23 @@ namespace Fluent_CQRS.Tests
                 .Try(aggregate => aggregate.ThrowException());
 
             _eventHandler.RecievedEvents.Count.Should().Be(0);
+        }
 
+        [Test]
+        public void When_instantiate_an_Aggregate_it_should_do_only_once()
+        {
+            var testCommand = new TestCommand
+            {
+                Id = "TestAggr"
+            };
 
+            _aggregates.Provide<EmptyTestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.DoNothing());
+
+            _aggregates.Provide<EmptyTestAggregate>().With(testCommand)
+                .Try(aggregate => aggregate.DoNothing());
+
+            _eventStore.RetrieveFor(testCommand.Id).OfType<InstanceCreated>().Count().Should().Be(1);
         }
     }
 }

@@ -20,21 +20,18 @@ namespace Fluent_CQRS
             _publishMethod = publishMethod;
         }
 
-        private TAggregate AggregateInstance(IAmACommandMessage command)
+        private void BuildAggregateFromHistory(IAmACommandMessage command, IEnumerable<IAmAnEventMessage> history)
         {
-            var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), command.Id);
+            var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), command.Id, history);
 
             _aggregate = ((TAggregate)aggregateAsObject);
-            return _aggregate;
         }
 
         public IInvokeActionsOnAggregates<TAggregate> With(IAmACommandMessage command)
         {
             var aggregateEvents = _eventStore.RetrieveFor(command.Id);
 
-            var aggregateInstance = AggregateInstance(command);
-
-            aggregateInstance.History = aggregateEvents;
+            BuildAggregateFromHistory(command, aggregateEvents);
 
             return this;
         }

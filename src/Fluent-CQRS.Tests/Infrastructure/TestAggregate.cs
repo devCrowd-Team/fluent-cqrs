@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fluent_CQRS.Tests.Infrastructure
 {
     class TestAggregate : Aggregate
     {
-        public TestAggregate(string id)
-            : base(id)
+        public TestAggregate(string id, IEnumerable<IAmAnEventMessage> history)
+            : base(id, history)
         {
+            
         }
 
         public void DoSomething()

@@ -1,8 +1,11 @@
-﻿namespace Fluent_CQRS.Tests.Infrastructure
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Fluent_CQRS.Tests.Infrastructure
 {
     class AlternativeTestAggregate : Aggregate
     {
-        public AlternativeTestAggregate(string id) : base(id)
+        public AlternativeTestAggregate(string id, IEnumerable<IAmAnEventMessage> history) : base(id, history)
         {
         }
 
