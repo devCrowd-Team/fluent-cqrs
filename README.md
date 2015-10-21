@@ -6,6 +6,9 @@ There is an **Api break**. The method `OnError` was splitted into `CatchExceptio
 (raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults).
 By default 'Do' throws all exceptions directly. Use 'Try' for catching errors.
 
+Now you can't use `Changes`, `History` or `MessagesOfType` outside of an aggregate.
+Someone has done it in the past and it feels like a pinch.
+
 ---
 
 Why fluent? Just look at this:
@@ -137,4 +140,5 @@ You can also filter for certain event messages:
         .ToAllEventHandlers();
 
 ---
+
 ~tbc

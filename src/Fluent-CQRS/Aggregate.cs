@@ -15,13 +15,13 @@ namespace Fluent_CQRS
             Id = id;
         }
 
-        public IEnumerable<IAmAnEventMessage> History { get; private set; }
+        private IEnumerable<IAmAnEventMessage> History { get; set; }
 
-        public IList<IAmAnEventMessage> Changes { get; private set; }
+        protected internal IList<IAmAnEventMessage> Changes { get; private set; }
 
-        internal IList<IAmAnEventMessage> EventsToReplay { get; private set; }
+        protected internal IList<IAmAnEventMessage> EventsToReplay { get; private set; }
 
-        public IEnumerable<T> MessagesOfType<T>() where T : IAmAnEventMessage
+        protected internal IEnumerable<T> MessagesOfType<T>() where T : IAmAnEventMessage
         {
             return History.Concat(Changes).OfType<T>(); 
         }
