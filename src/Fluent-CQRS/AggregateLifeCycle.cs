@@ -20,18 +20,18 @@ namespace Fluent_CQRS
             _publishMethod = publishMethod;
         }
 
-        private void BuildAggregateFromHistory(IAmACommandMessage command, IEnumerable<IAmAnEventMessage> history)
-        {
-            var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), command.Id, history);
-
-            _aggregate = ((TAggregate)aggregateAsObject);
-        }
-
         public IInvokeActionsOnAggregates<TAggregate> With(IAmACommandMessage command)
         {
-            var aggregateEvents = _eventStore.RetrieveFor(command.Id);
+            var aggregateId = new AggregateId(command.Id);
 
-            BuildAggregateFromHistory(command, aggregateEvents);
+            return With(aggregateId);
+        }
+
+        public IInvokeActionsOnAggregates<TAggregate> With(AggregateId id)
+        {
+            var aggregateEvents = _eventStore.RetrieveFor(id.Value);
+
+            _aggregate = BuildAggregateFromHistory(id.Value, aggregateEvents);
 
             return this;
         }
@@ -55,6 +55,13 @@ namespace Fluent_CQRS
             executionResult = TryPublishChanges(executionResult);
 
             return executionResult;
+        }
+
+        private static TAggregate BuildAggregateFromHistory(string aggregateId, IEnumerable<IAmAnEventMessage> history)
+        {
+            var aggregateAsObject = Activator.CreateInstance(typeof(TAggregate), aggregateId, history);
+
+            return ((TAggregate)aggregateAsObject);
         }
 
         private ExecutionResult TryInvokeAggregateMethod(Action<TAggregate> doAction)

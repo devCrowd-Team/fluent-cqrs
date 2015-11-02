@@ -6,9 +6,13 @@ There is an **Api break**. The method `OnError` was splitted into `CatchExceptio
 (raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults).
 By default 'Do' throws all exceptions directly. Use 'Try' for catching errors.
 
+####2.0.3.3
 Now you can't use `Changes`, `History` or `MessagesOfType` outside of an aggregate.
 Someone has done it in the past and it feels like a pinch.
 
+####2.0.3.4
+The `With(command)` method gets a sister, `With(new AggregateId("cool Id")`. You can use it for providing Aggregats in 
+CommandHandlers by commands without Id for the Aggregate. May be you can retrieve the Id by an other way like Read Model.
 ---
 
 Why fluent? Just look at this:
@@ -26,7 +30,8 @@ Why fluent? Just look at this:
         {
             _aggregates
                 .Provide<[AnAggregateYouLike]>
-                .With(command.AggregateId)
+                .With(command)
+                // or you can use .With(new AggregateId("cool id")
                 .Do(yourAggregate => yourAggregate.DoSomethingWith(command.Data));
 
             // You want it with exception handling?
@@ -34,7 +39,8 @@ Why fluent? Just look at this:
 
             _aggregates
                 .Provide<[AnAggregateYouLike]>
-                .With(command.AggregateId)
+                .With(command)
+                // or you can use .With(new AggregateId("cool id")
                 .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
                 .CatchException(exception=> handleThis(exception));
 
@@ -42,7 +48,8 @@ Why fluent? Just look at this:
 
             _aggregates
                 .Provide<[AnAggregateYouLike]>
-                .With(command.AggregateId)
+                .With(command)
+                // or you can use .With(new AggregateId("cool id")
                 .Try(yourAggregate => yourAggregate.DoSomethingWith(command.Data))
                 .CatchFault(fault=> handleThis(fault))
                 .CatchException(exception => handleThis(exception));

@@ -89,7 +89,6 @@ namespace Fluent_CQRS.Tests
             _eventHandler.RecievedEvents.Count.Should().Be(4);
         }
 
-
         [Test]
         public void When_replay_Events_of_only_one_type_it_should_ignore_all_other()
         {
@@ -181,6 +180,17 @@ namespace Fluent_CQRS.Tests
                 .ToAllEventHandlers();
 
             _eventHandler.RecievedEvents.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void When_get_an_Aggregate_by_AggregateId()
+        {
+            var aggrId = "Test";
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new AggregateId(aggrId))
+                .Do(aggr => aggr.Id.Should().Be(aggrId));
         }
     }
 }

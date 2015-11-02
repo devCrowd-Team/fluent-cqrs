@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="AggregateId.cs" />
     <Compile Include="AggregateLifeCycle.cs" />
     <Compile Include="Aggregates.cs" />
     <Compile Include="EventBag.cs" />
