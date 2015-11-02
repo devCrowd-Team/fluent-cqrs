@@ -97,13 +97,17 @@
     <Compile Include="EventHandlers.cs" />
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\ExecutionResultExtension.cs" />
+    <Compile Include="Fold.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
+    <Compile Include="FoldAction.cs" />
+    <Compile Include="IAggregateMessages.cs" />
     <Compile Include="IAmACommandMessage.cs" />
     <Compile Include="IAmAnEventMessage.cs" />
     <Compile Include="ICollectEvents.cs" />
     <Compile Include="IConcatenateEventHandler.cs" />
+    <Compile Include="IFoldAction.cs" />
     <Compile Include="InMemoryEventStore.cs" />
     <Compile Include="IReplayEvents.cs" />
     <Compile Include="IStoreAndRetrieveEvents.cs" />

@@ -53,19 +53,26 @@
   <ItemGroup>
     <Compile Include="AggregatesRepositoryTests.cs" />
     <Compile Include="AggregateTests.cs" />
+    <Compile Include="AggregateUnderTest.cs" />
+    <Compile Include="HistoryTests.cs" />
     <Compile Include="Infrastructure\AlternativeTestAggregate.cs" />
     <Compile Include="Infrastructure\AlternativeTestEventHandler.cs" />
     <Compile Include="Infrastructure\BusinessFault.cs" />
     <Compile Include="Infrastructure\EmptyTestAggregate.cs" />
     <Compile Include="Infrastructure\InstanceCreated.cs" />
+    <Compile Include="Infrastructure\NeverUsed.cs" />
+    <Compile Include="Infrastructure\SomeThingElseHappened.cs" />
     <Compile Include="Infrastructure\SomethingHappend.cs" />
     <Compile Include="Infrastructure\SomethingHappendOnce.cs" />
     <Compile Include="Infrastructure\SomethingSpecialHappend.cs" />
     <Compile Include="Infrastructure\TestAggregate.cs" />
     <Compile Include="Infrastructure\TestCommand.cs" />
     <Compile Include="Infrastructure\TestEventHandler.cs" />
+    <Compile Include="Infrastructure\ValueChanged.cs" />
+    <Compile Include="Infrastructure\ValueInitialized.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="With_Aggregates_Repository.cs" />
+    <Compile Include="With_AggregateUnderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fluent-CQRS\Fluent-CQRS.csproj">

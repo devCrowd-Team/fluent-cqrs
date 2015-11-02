@@ -11,7 +11,7 @@ namespace Fluent_CQRS
             Changes = new List<IAmAnEventMessage>();
             History = new List<IAmAnEventMessage>(history);
             EventsToReplay = new List<IAmAnEventMessage>();
-            
+
             Id = id;
         }
 
@@ -23,7 +23,17 @@ namespace Fluent_CQRS
 
         protected internal IEnumerable<T> MessagesOfType<T>() where T : IAmAnEventMessage
         {
-            return History.Concat(Changes).OfType<T>(); 
+            return History.Concat(Changes).OfType<T>();
+        }
+
+        protected internal Fold<TResult> WithAnIntitialStateAs<TResult>()
+        {
+            return new Fold<TResult>(History.Concat(Changes));
+        }
+
+        protected internal Fold<TResult> WithAnInitialStateOf<TResult>(TResult startValue)
+        {
+            return new Fold<TResult>(History.Concat(Changes), startValue);
         }
 
         public void Replay(IAmAnEventMessage eventMessage)
