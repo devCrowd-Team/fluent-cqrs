@@ -26,12 +26,12 @@ namespace Fluent_CQRS
             return History.Concat(Changes).OfType<T>();
         }
 
-        protected internal Fold<TResult> WithAnIntitialStateAs<TResult>()
+        protected internal Fold<TResult> InitializedAs<TResult>()
         {
             return new Fold<TResult>(History.Concat(Changes));
         }
 
-        protected internal Fold<TResult> WithAnInitialStateOf<TResult>(TResult startValue)
+        protected internal Fold<TResult> InitializedWith<TResult>(TResult startValue)
         {
             return new Fold<TResult>(History.Concat(Changes), startValue);
         }

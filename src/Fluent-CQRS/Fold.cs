@@ -7,8 +7,8 @@ namespace Fluent_CQRS
     public class Fold<TResult> : IAggregateMessages<TResult>
     {
         IEnumerable<IAmAnEventMessage> _events;
-        IList<IFoldAction<TResult>> _foldActions;
-        Func<TResult, TResult> _elseAction = state => state;  //identity
+        Aggregations<TResult> _aggregations = new Aggregations<TResult>();
+        Func<TResult, TResult> _otherwise = state => state;  //identity
         TResult _startValue;
 
         internal Fold(IEnumerable<IAmAnEventMessage> events)
@@ -18,54 +18,49 @@ namespace Fluent_CQRS
         internal Fold(IEnumerable<IAmAnEventMessage> events, TResult startValue)
         {
             _events = events;
-            _foldActions = new List<IFoldAction<TResult>>();
             _startValue = startValue;
         }
 
         public Fold<TResult> SetToAConstForAny<TEvent>(TResult value)
             where TEvent : IAmAnEventMessage
         {
-            return ApplyForAny<TEvent>((@event, accumulator) => value);
+            return ApplyForAny<TEvent>((state, message) => value);
         }
 
         public Fold<TResult> ApplyForAny<TEvent>(Func<TEvent, TResult> apply)
             where TEvent : IAmAnEventMessage
         {
-            return ApplyForAny<TEvent>((@event, accumulator) => apply(@event));
+            return ApplyForAny<TEvent>((state, message) => apply(message));
         }
 
-        public Fold<TResult> ApplyForAny<TEvent>(Func<TEvent, TResult, TResult> apply)
+        public Fold<TResult> ApplyForAny<TEvent>(Func<TResult, TEvent, TResult> apply)
             where TEvent : IAmAnEventMessage
         {
-            var action = new FoldAction<TEvent, TResult>
-                ((@event, accumulator) => apply((TEvent)@event, accumulator))
-                ;
-            _foldActions.Add(action);
+            _aggregations.Add(apply);
             return this;
         }
 
         public TResult AggregateAllMessages()
         {
-            var actionApplied = false;
-            var dehydrated =
-                _events.Aggregate(_startValue, (result, @event) =>
-                         _foldActions.Where(f => f.IsActionFor(@event))
-                                     .Aggregate(result, (current, f) =>
-                                     {
-                                         actionApplied = true;
-                                         return f.Apply(@event, current);
-                                     }));
-            return actionApplied ? dehydrated : _elseAction(dehydrated);
+            var initialState = new AggregationState<TResult>(false, _startValue);
+            var dehydrated = _events.Aggregate(initialState, (currentState, @event) 
+                => _aggregations.Apply(currentState, @event));
+            return dehydrated.Applied
+                ? dehydrated.Result
+                : _otherwise(dehydrated.Result);
         }
 
-        public IAggregateMessages<TResult> Else(TResult v)
+        public IAggregateMessages<TResult> Otherwise(TResult v)
         {
-            return Else(state => v);
+            return Otherwise(state => v);
         }
-
-        public IAggregateMessages<TResult> Else(Func<TResult, TResult> func)
+        public IAggregateMessages<TResult> Otherwise(Func<TResult> f)
         {
-            _elseAction = func;
+            return Otherwise(state => f());
+        }
+        public IAggregateMessages<TResult> Otherwise(Func<TResult, TResult> func)
+        {
+            _otherwise = func;
             return this;
         }
     }

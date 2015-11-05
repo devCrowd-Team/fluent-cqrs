@@ -14,36 +14,43 @@ namespace Fluent_CQRS.Tests
         }
         //you SHOULD NEVER set properties to public in production for aggregates
         public int NumberOfValueChanges => MessagesOfType<ValueChanged>().Count();
-        public int SumOfValueChanges => MessagesOfType<ValueChanged>().Sum(e => e.Value);
-        public int SumOfAnyValues => MessagesOfType<ValueInitialized>().Sum(e => e.Value)
-                                    + MessagesOfType<ValueChanged>().Sum(e => e.Value);
+
+        public int SumOfValueChanges => MessagesOfType<ValueChanged>().Sum(message => message.Value);
+
+        public int SumOfAnyValues => MessagesOfType<ValueInitialized>().Sum(message => message.Value)
+                                    + MessagesOfType<ValueChanged>().Sum(message => message.Value);
+
         public int SumOfAnyValuesAggregated
-            => WithAnIntitialStateAs<int>()
+            => InitializedAs<int>()
                    .ApplyForAny<ValueInitialized>((message) => message.Value)
-                   .ApplyForAny<ValueChanged>((message, state) => state + message.Value)
+                   .ApplyForAny<ValueChanged>(( state, message) => state + message.Value)
                    .AggregateAllMessages();
 
         public int SumOfAllValuesAfterSomeThingHappened
-            => WithAnInitialStateOf(0)
-                   .ApplyForAny<ValueInitialized>((@event, state) => state + @event.Value)
-                   .ApplyForAny<ValueChanged>((@event, state) => state + @event.Value)
+            => InitializedWith(0)
+                   .ApplyForAny<ValueInitialized>(( state, message) => state + message.Value)
+                   .ApplyForAny<ValueChanged>((state, message) => state + message.Value)
                    .SetToAConstForAny<SomeThingElseHappened>(0)
                    .AggregateAllMessages();
+
         public string PassInitialState
-            => WithAnInitialStateOf("CQRS")
+            => InitializedWith("CQRS")
                     .AggregateAllMessages();
+
         public string ReturnDefaultValue
-            => WithAnIntitialStateAs<string>()
+            => InitializedAs<string>()
                     .AggregateAllMessages();
+
         public string ElseCase
-            => WithAnIntitialStateAs<string>()
-                    .ApplyForAny<NeverUsed>(e => "Hello World")
-                    .Else("Else")
+            => InitializedAs<string>()
+                    .ApplyForAny<NeverUsed>(message => "Hello World")
+                    .Otherwise("Else")
                     .AggregateAllMessages();
+
         public string ElseCaseNotNeeded
-            => WithAnIntitialStateAs<string>()
-                    .ApplyForAny<ValueInitialized>(e => "Else Not Needed")
-                    .Else("Else")
+            => InitializedAs<string>()
+                    .ApplyForAny<ValueInitialized>(message => "Else Not Needed")
+                    .Otherwise("Else")
                     .AggregateAllMessages();
     }
 }

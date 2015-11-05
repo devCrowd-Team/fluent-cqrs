@@ -36,7 +36,7 @@ namespace Fluent_CQRS.Tests
             Assert.AreEqual(15, result);
         }
         [Test]
-        public void When_messages_are_aggregated_their_history_can_be_respected()
+        public void When_messages_are_aggregated_their_history_must_be_respected()
         {
             var result = _aggregate.SumOfAllValuesAfterSomeThingHappened;
             Assert.AreEqual(9, result);
@@ -48,19 +48,19 @@ namespace Fluent_CQRS.Tests
             Assert.AreEqual("CQRS", result);
         }
         [Test]
-        public void When_messages_are_aggregated_the_stat_can_be_set_to_the_default_value_of_the_return_type()
+        public void When_messages_are_aggregated_the_state_can_be_set_to_the_default_value_of_the_return_type()
         {
             var result = _aggregate.ReturnDefaultValue;
             Assert.AreEqual(null, result);
         }
         [Test]
-        public void When_messages_are_aggregated_and_no_suitable_events_are_found_a_else_case_can_be_defined()
+        public void When_messages_are_aggregated_and_no_suitable_events_are_found_a_elsecase_can_be_defined()
         {
             var result = _aggregate.ElseCase;
             Assert.AreEqual("Else", result);
         }
         [Test]
-        public void When_messages_are_aggregated_and__suitable_events_are_found_a_else_case_is_ignored()
+        public void When_messages_are_aggregated_and__suitable_events_are_found_elsecase_is_ignored()
         {
             var result = _aggregate.ElseCaseNotNeeded;
             Assert.AreEqual("Else Not Needed", result);
