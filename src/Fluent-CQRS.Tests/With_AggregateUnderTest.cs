@@ -1,17 +1,11 @@
 ﻿using Fluent_CQRS.Tests.Infrastructure;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fluent_CQRS.Tests
 {
     public class With_AggregateUnderTest
     {
         internal AggregateUnderTest _aggregate;
-
 
         [SetUp]
         public void Setup()

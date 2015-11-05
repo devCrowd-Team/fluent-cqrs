@@ -30,7 +30,7 @@ namespace Fluent_CQRS.Tests
             => InitializedWith(0)
                    .ApplyForAny<ValueInitialized>(( state, message) => state + message.Value)
                    .ApplyForAny<ValueChanged>((state, message) => state + message.Value)
-                   .SetToAConstForAny<SomeThingElseHappened>(0)
+                   .ApplyForAny<SomeThingElseHappened>(0)
                    .AggregateAllMessages();
 
         public string PassInitialState

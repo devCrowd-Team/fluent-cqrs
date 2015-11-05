@@ -4,64 +4,66 @@ using System.Linq;
 
 namespace Fluent_CQRS
 {
-    public class Fold<TResult> : IAggregateMessages<TResult>
+    public class Fold<TState> : IAggregateMessages<TState>
     {
-        IEnumerable<IAmAnEventMessage> _events;
-        Aggregations<TResult> _aggregations = new Aggregations<TResult>();
-        Func<TResult, TResult> _otherwise = state => state;  //identity
-        TResult _startValue;
+        IEnumerable<IAmAnEventMessage> _messages;
+        MappingMethods<TState> _mappings = new MappingMethods<TState>();
+        Func<TState, TState> _otherwise = state => state;  //identity
+        TState _startValue;
 
         internal Fold(IEnumerable<IAmAnEventMessage> events)
-            : this(events, default(TResult))
+            : this(events, default(TState))
         { }
 
-        internal Fold(IEnumerable<IAmAnEventMessage> events, TResult startValue)
+        internal Fold(IEnumerable<IAmAnEventMessage> messages, TState startValue)
         {
-            _events = events;
+            _messages = messages;
             _startValue = startValue;
         }
 
-        public Fold<TResult> SetToAConstForAny<TEvent>(TResult value)
-            where TEvent : IAmAnEventMessage
+        public Fold<TState> ApplyForAny<TMessage>(TState value)
+            where TMessage : IAmAnEventMessage
         {
-            return ApplyForAny<TEvent>((state, message) => value);
+            return ApplyForAny<TMessage>((state, message) => value);
         }
 
-        public Fold<TResult> ApplyForAny<TEvent>(Func<TEvent, TResult> apply)
-            where TEvent : IAmAnEventMessage
+        public Fold<TState> ApplyForAny<TMessage>(Func<TMessage, TState> apply)
+            where TMessage : IAmAnEventMessage
         {
-            return ApplyForAny<TEvent>((state, message) => apply(message));
+            return ApplyForAny<TMessage>((state, message) => apply(message));
         }
 
-        public Fold<TResult> ApplyForAny<TEvent>(Func<TResult, TEvent, TResult> apply)
-            where TEvent : IAmAnEventMessage
+        public Fold<TState> ApplyForAny<TMessage>(Func<TState, TMessage, TState> apply)
+            where TMessage : IAmAnEventMessage
         {
-            _aggregations.Add(apply);
+            _mappings.Add(apply);
             return this;
         }
 
-        public TResult AggregateAllMessages()
-        {
-            var initialState = new AggregationState<TResult>(false, _startValue);
-            var dehydrated = _events.Aggregate(initialState, (currentState, @event) 
-                => _aggregations.Apply(currentState, @event));
-            return dehydrated.Applied
-                ? dehydrated.Result
-                : _otherwise(dehydrated.Result);
-        }
-
-        public IAggregateMessages<TResult> Otherwise(TResult v)
+        public IAggregateMessages<TState> Otherwise(TState v)
         {
             return Otherwise(state => v);
         }
-        public IAggregateMessages<TResult> Otherwise(Func<TResult> f)
+
+        public IAggregateMessages<TState> Otherwise(Func<TState> f)
         {
             return Otherwise(state => f());
         }
-        public IAggregateMessages<TResult> Otherwise(Func<TResult, TResult> func)
+
+        public IAggregateMessages<TState> Otherwise(Func<TState, TState> func)
         {
             _otherwise = func;
             return this;
+        }
+
+        public TState AggregateAllMessages()
+        {
+            var initialState = new ResultSet<TState>(_startValue, false);
+            var dehydrated = _messages.Aggregate(initialState, (currentState, @event)
+                => _mappings.Apply(currentState, @event));
+            return dehydrated.Modified
+                ? dehydrated.State
+                : _otherwise(dehydrated.State);
         }
     }
 }

@@ -54,7 +54,7 @@
     <Compile Include="AggregatesRepositoryTests.cs" />
     <Compile Include="AggregateTests.cs" />
     <Compile Include="AggregateUnderTest.cs" />
-    <Compile Include="HistoryTests.cs" />
+    <Compile Include="StateDehydrationTests.cs" />
     <Compile Include="Infrastructure\AlternativeTestAggregate.cs" />
     <Compile Include="Infrastructure\AlternativeTestEventHandler.cs" />
     <Compile Include="Infrastructure\BusinessFault.cs" />

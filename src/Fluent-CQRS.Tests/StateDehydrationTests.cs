@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Fluent_CQRS.Tests
 {
     [TestFixture]
-    public class HistoryTests : With_AggregateUnderTest
+    public class StateDehydrationTests : With_AggregateUnderTest
     {
         [Test]
         public void When_messages_are_examined_with_MessagesOfType_they_can_be_counted()
