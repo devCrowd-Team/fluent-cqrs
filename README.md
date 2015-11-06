@@ -11,7 +11,7 @@ Now you can't use `Changes`, `History` or `MessagesOfType` outside of an aggrega
 Someone has done it in the past and it feels like a pinch.
 
 ####2.0.3.4
-The `With(command)` method gets a sister, `With(new AggregateId("cool Id"))`. You can use it for providing Aggregats in
+The `With(command)` method gets a sister, `With(new AggregateId("cool Id"))`. You can use it for providing Aggregates in
 CommandHandlers by commands without Id for the Aggregate. May be you can retrieve the Id by an other way like Read Model.
 
 ---
@@ -96,8 +96,9 @@ All right... Now let's have a look inside the **Aggregate**.
     }
 ```
 
-The very cool thing of an event store is that you can make decisions based on the history. There are two different ways doing that.
-The simplest way is using `MessagesOfType<MessageType()>`.
+The very cool thing of an aggregate is that you can make decisions based on the event history. There are two different ways doing that.
+
+The simplest way is using `MessagesOfType<T>()`.
 
 ```csharp
 class CoolAggregate() : Aggregate
@@ -109,20 +110,32 @@ class CoolAggregate() : Aggregate
       ...
   }
 ```
-This might be enough for a lot of use cases, though sometimes it is not that easy and multiple events are playing together. Now it's time for the CQRS Swiss knife, as the current state is just a left fold/ aggregate  of all preceding events.
+This might be enough for a lot of use cases, though sometimes it is not that easy and multiple events are playing together. Now it's time for the CQRS Swiss knife, as the current state is just a left fold/ aggregate of all preceding events.
 
-In that case you set up the rules that should happen for any event you like. use it to restore a complex entity or a simple value, it is up to you.
+In that case you set up the rules that should happen for any event you like. Use it to restore a complex entity or a simple value, it is up to you.
 
 ```csharp
 class CoolAggregate() : Aggregate
   {
 
       OtherType BetterStuff =>
-            InitialzedAs<OtherType>() //InitializeWith(new BetterStuff())
-              .ApplyForAny<ItHasStarted>(message => message.BetterStuff) // former state can be ignored
-              .ApplyForAny<ThisHappened>(state, message => f(state, message.OtherStuff)) // the former state can be used for calculations
-              .ApplyForAny<ThatWasCool>(new BetterStuff(param)) // well, or set to a constant
-              .Otherwise(() => throw new BusinessFault () ) // or set it to anything you like
+            // or InitializeWith(new OtherType())    
+            InitialzedAs<OtherType>()
+              // former state can be ignored
+              .ApplyForAny<ItHasStarted>(message => message.BetterStuff)
+
+              // the former state can be used for calculations
+              .ApplyForAny<ThisHappened>(state, message => f(state, message.OtherStuff))
+
+              // well, or set to a constant
+              .ApplyForAny<ThatWasCool>(new OtherType(param))
+
+              // if none of the Events can be found,
+              // Otherwise will be executed   
+              .Otherwise(() => throw new MyBusinessFault() )
+              // or set it to something
+
+              // the actual fold over all domain events
               .AggregateAllEvents();
 
   }
@@ -131,7 +144,7 @@ class CoolAggregate() : Aggregate
 In some cases you want to save an event only once, but if you add the event into the list of Changes like above,
 the event will save every time.
 
-Bad, very bad. Here comes the hero 'Replay' ...
+Bad, very bad. Here comes the hero `Replay` ...
 
 ```csharp
     class CoolAggregate() : Aggregate
@@ -159,30 +172,37 @@ The `Replay` method prevents you for multiple equals events. It fires to the eve
 Nice, really nice... But what if you want to **replay all Events** of an Aggregate? Yes... you couldn't... still now.
 
 To replay all Events of an Aggregate code this:
+
 ```csharp
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .EventsWithAggregateId(aggrId)
         .ToAllEventHandlers();
 ```
+
 This published all Events of the Aggregate with the given ID to all registered Event Handler.
 If you want to publish to only one special Event Handler change your Code to:
+
 ```csharp
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .EventsWithAggregateId(aggrId)
         .To([OneOfYourEventHandler]);
 ```
+
 This is simple, as well.
 
 You can also replay events of an aggregate type:
+
 ```csharp
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .AllEvents()
         .ToAllEventHandlers();
 ```
+
 You can also filter for certain event messages:
+
 ```csharp
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
@@ -190,6 +210,7 @@ You can also filter for certain event messages:
         .OfType<[AnEvent]>()
         .ToAllEventHandlers();
 ```
+
 ---
 
 ~tbc
