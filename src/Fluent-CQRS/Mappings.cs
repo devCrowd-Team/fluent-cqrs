@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Fluent_CQRS
 {
-    class MappingMethods<TState>
+    class Mappings<TState>
     {
         IList<Func<ResultSet<TState>, IAmAnEventMessage, ResultSet<TState>>> _mappings
             = new List<Func<ResultSet<TState>, IAmAnEventMessage, ResultSet<TState>>>();

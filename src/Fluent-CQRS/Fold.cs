@@ -7,7 +7,7 @@ namespace Fluent_CQRS
     public class Fold<TState> : IAggregateMessages<TState>
     {
         IEnumerable<IAmAnEventMessage> _messages;
-        MappingMethods<TState> _mappings = new MappingMethods<TState>();
+        Mappings<TState> _mappings = new Mappings<TState>();
         Func<TState, TState> _otherwise = state => state;  //identity
         TState _startValue;
 
