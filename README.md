@@ -170,7 +170,7 @@ The `Replay` method prevents you for multiple equals events. It fires to the eve
 
 ---
 
-Nice, really nice... But what if you want to **replay all Events** of an Aggregate? Yes... you couldn't... still now.
+Nice, really nice... But what if you want to **replay all Events** of an Aggregate? Yes... you couldn't... till now.
 
 To replay all Events of an Aggregate code this:
 
