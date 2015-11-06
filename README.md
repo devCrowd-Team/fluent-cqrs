@@ -137,7 +137,7 @@ class CoolAggregate() : Aggregate
               // Please note that Otherwise is optional
 
               // the actual fold over all domain events
-              .AggregateAllEvents();
+              .AggregateAllMessages();
 
   }
 ```
