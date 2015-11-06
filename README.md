@@ -110,7 +110,7 @@ class CoolAggregate() : Aggregate
       ...
   }
 ```
-This might be enough for a lot of use cases, though sometimes it is not that easy and multiple events are playing together. Now it's time for the CQRS Swiss knife, as the current state is just a left fold/ aggregate of all preceding events.
+This might be enough for a lot of use cases, though sometimes it is not that easy and multiple events are playing together and their order gets important. Now it's time for the Swiss knife of **Event Sourcing**, as the current state is just a left fold/ aggregate of all preceding events.
 
 In that case you set up the rules that should happen for any event you like. Use it to restore a complex entity or a simple value, it is up to you.
 
@@ -128,12 +128,13 @@ class CoolAggregate() : Aggregate
               .ApplyForAny<ThisHappened>(state, message => f(state, message.OtherStuff))
 
               // well, or set to a constant
-              .ApplyForAny<ThatWasCool>(new OtherType(param))
+              .ApplyForAny<ThatWasCool>(SomeConstantState)
 
               // if none of the Events can be found,
               // Otherwise will be executed   
-              .Otherwise(() => throw new MyBusinessFault() )
-              // or set it to something
+              .Otherwise(() => OtherConstantState )
+              // or => throw new BusinesFault()
+              // Please note that Otherwise is optional
 
               // the actual fold over all domain events
               .AggregateAllEvents();
