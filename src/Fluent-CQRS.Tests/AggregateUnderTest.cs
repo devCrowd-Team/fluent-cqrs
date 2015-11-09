@@ -13,44 +13,86 @@ namespace Fluent_CQRS.Tests
         {
         }
         //you SHOULD NEVER set properties to public in production for aggregates
-        public int NumberOfValueChanges => MessagesOfType<ValueChanged>().Count();
+        public int NumberOfValueChanges
+        {
+            get{ return MessagesOfType<ValueChanged>().Count();}
+        }
 
-        public int SumOfValueChanges => MessagesOfType<ValueChanged>().Sum(message => message.Value);
+        public int SumOfValueChanges
+        {
+            get { return MessagesOfType<ValueChanged>().Sum(message => message.Value); }
+        }
 
-        public int SumOfAnyValues => MessagesOfType<ValueInitialized>().Sum(message => message.Value)
-                                    + MessagesOfType<ValueChanged>().Sum(message => message.Value);
+        public int SumOfAnyValues
+        {
+            get
+            {
+                return MessagesOfType<ValueInitialized>().Sum(message => message.Value)
+                       + MessagesOfType<ValueChanged>().Sum(message => message.Value);
+            }
+        }
 
         public int SumOfAnyValuesAggregated
-            => InitializedAs<int>()
-                   .ApplyForAny<ValueInitialized>((message) => message.Value)
-                   .ApplyForAny<ValueChanged>(( state, message) => state + message.Value)
-                   .AggregateAllMessages();
+        {
+            get
+            {
+                return InitializedAs<int>()
+                    .ApplyForAny<ValueInitialized>((message) => message.Value)
+                    .ApplyForAny<ValueChanged>((state, message) => state + message.Value)
+                    .AggregateAllMessages();
+            }
+        }
 
         public int SumOfAllValuesAfterSomeThingHappened
-            => InitializedWith(0)
-                   .ApplyForAny<ValueInitialized>(( state, message) => state + message.Value)
-                   .ApplyForAny<ValueChanged>((state, message) => state + message.Value)
-                   .ApplyForAny<SomeThingElseHappened>(0)
-                   .AggregateAllMessages();
+        {
+            get
+            {
+                return InitializedWith(0)
+                    .ApplyForAny<ValueInitialized>((state, message) => state + message.Value)
+                    .ApplyForAny<ValueChanged>((state, message) => state + message.Value)
+                    .ApplyForAny<SomeThingElseHappened>(0)
+                    .AggregateAllMessages();
+            }
+        }
 
         public string PassInitialState
-            => InitializedWith("CQRS")
+        {
+            get
+            {
+                return InitializedWith("CQRS")
                     .AggregateAllMessages();
+            }
+        }
 
         public string ReturnDefaultValue
-            => InitializedAs<string>()
+        {
+            get
+            {
+                return InitializedAs<string>()
                     .AggregateAllMessages();
+            }
+        }
 
         public string ElseCase
-            => InitializedAs<string>()
+        {
+            get
+            {
+                return InitializedAs<string>()
                     .ApplyForAny<NeverUsed>(message => "Hello World")
                     .Otherwise("Else")
                     .AggregateAllMessages();
+            }
+        }
 
         public string ElseCaseNotNeeded
-            => InitializedAs<string>()
+        {
+            get
+            {
+                return InitializedAs<string>()
                     .ApplyForAny<ValueInitialized>(message => "Else Not Needed")
                     .Otherwise("Else")
                     .AggregateAllMessages();
+            }
+        }
     }
 }
