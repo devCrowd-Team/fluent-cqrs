@@ -93,13 +93,17 @@
     <Compile Include="AggregateId.cs" />
     <Compile Include="AggregateLifeCycle.cs" />
     <Compile Include="Aggregates.cs" />
+    <Compile Include="ResultSet.cs" />
     <Compile Include="EventBag.cs" />
     <Compile Include="EventHandlers.cs" />
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="Extensions\ExecutionResultExtension.cs" />
+    <Compile Include="Fold.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="Fluentation\IInvokeActionsOnAggregates.cs" />
     <Compile Include="Fluentation\IProvideAnAggregate.cs" />
+    <Compile Include="Mappings.cs" />
+    <Compile Include="IAggregateMessages.cs" />
     <Compile Include="IAmACommandMessage.cs" />
     <Compile Include="IAmAnEventMessage.cs" />
     <Compile Include="ICollectEvents.cs" />

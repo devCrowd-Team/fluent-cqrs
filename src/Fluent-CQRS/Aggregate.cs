@@ -6,12 +6,12 @@ namespace Fluent_CQRS
 {
     public class Aggregate
     {
-        public Aggregate(String id, IEnumerable<IAmAnEventMessage> history)
+        public Aggregate(string id, IEnumerable<IAmAnEventMessage> history)
         {
             Changes = new List<IAmAnEventMessage>();
             History = new List<IAmAnEventMessage>(history);
             EventsToReplay = new List<IAmAnEventMessage>();
-            
+
             Id = id;
         }
 
@@ -23,7 +23,17 @@ namespace Fluent_CQRS
 
         protected internal IEnumerable<T> MessagesOfType<T>() where T : IAmAnEventMessage
         {
-            return History.Concat(Changes).OfType<T>(); 
+            return History.Concat(Changes).OfType<T>();
+        }
+
+        protected internal Fold<TState> InitializedAs<TState>()
+        {
+            return new Fold<TState>(History.Concat(Changes));
+        }
+
+        protected internal Fold<TState> InitializedWith<TState>(TState startValue)
+        {
+            return new Fold<TState>(History.Concat(Changes), startValue);
         }
 
         public void Replay(IAmAnEventMessage eventMessage)
@@ -31,6 +41,6 @@ namespace Fluent_CQRS
             EventsToReplay.Add(eventMessage);
         }
 
-        public String Id { get; protected internal set; }
+        public string Id { get; protected internal set; }
     }
 }
