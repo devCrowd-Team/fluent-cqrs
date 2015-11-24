@@ -19,6 +19,7 @@ CommandHandlers by commands without Id for the Aggregate. May be you can retriev
 Why fluent? Just look at this:
 
 ```csharp
+    
     public class AwsomeCommandHandler
     {
         Aggregates _aggregates;
@@ -66,7 +67,9 @@ Ok, but what do I have to do to **publish** the new state, aka **Domain Events**
 
 This is simple. You assign any Event Handler you like by chaining it by the `And` method after `PublishNewStateTo`.
 For example you have three Event Handlers:
-```csharp
+
+```
+
     var _aggregates = Aggregates.CreateWith(yourExtremeGoodEventStoreInstance);
     var firstEventHandler = new SampleEventHandler();
     var secondEventHandler = new ReportingHandler();
@@ -82,11 +85,13 @@ now all your cool Event Handlers receiving all changes of an aggregate.
 ---
 
 All right... Now let's have a look inside the **Aggregate**.
+
 ```csharp
+
     class CoolAggregate() : Aggregate
     {
         public CoolAggregate(string id, IEnumerable<IAmAnEventMessage> history)
-          : base(id, history) { }
+            : base(id, history) { }
         ...
         public void DoSomethingHelpful()
         {
@@ -101,45 +106,49 @@ The very cool thing of an aggregate is that you can make decisions based on the 
 The simplest way is using `MessagesOfType<T>()`.
 
 ```csharp
-class CoolAggregate() : Aggregate
-  {
-      ...
-      bool ItHappened => MessagesOfType<SomethingHappend>().Any();
-      int HappeningCounter => MessagesOfType<SomethingHappend>().Count();
-      AType CoolStuff => MessagesOfType<SomethingHappend>().Last().CoolStuff;
-      ...
-  }
+
+    // Do not wonder, it is the nes C# 6 Style
+    class CoolAggregate() : Aggregate
+    {
+        ...
+        bool ItHappened => MessagesOfType<SomethingHappend>().Any();
+        int HappeningCounter => MessagesOfType<SomethingHappend>().Count();
+        AType CoolStuff => MessagesOfType<SomethingHappend>().Last().CoolStuff;
+        ...
+    }
 ```
 This might be enough for a lot of use cases, though sometimes it is not that easy and multiple events are playing together and their order gets important. Now it's time for the Swiss knife of **Event Sourcing**, as the current state is just a left fold/ aggregate of all preceding events.
 
 In that case you set up the rules that should happen for any event you like. Use it to restore a complex entity or a simple value, it is up to you.
 
 ```csharp
-class CoolAggregate() : Aggregate
-  {
 
-      OtherType BetterStuff =>
+    // Do not wonder, it is the nes C# 6 Style
+    class CoolAggregate() : Aggregate
+    {
+
+        OtherType BetterStuff =>
             // or InitializeWith(new OtherType())    
             InitialzedAs<OtherType>()
-              // former state can be ignored
-              .ApplyForAny<ItHasStarted>(message => message.BetterStuff)
+                // former state can be ignored
+                .ApplyForAny<ItHasStarted>(message => message.BetterStuff)
 
-              // the former state can be used for calculations
-              .ApplyForAny<ThisHappened>(state, message => f(state, message.OtherStuff))
+                // the former state can be used for calculations
+                .ApplyForAny<ThisHappened>(state, message => f(state, message.OtherStuff))
 
-              // well, or set to a constant
-              .ApplyForAny<ThatWasCool>(SomeConstantState)
+                // well, or set to a constant
+                .ApplyForAny<ThatWasCool>(SomeConstantState)
 
-              // if none of the Events can be found,
-              // Otherwise will be executed   
-              .Otherwise(() => OtherConstantState )
-              // or => throw new BusinesFault()
-              // Please note that Otherwise is optional
+                // if none of the Events can be found,
+                // Otherwise will be executed   
+                .Otherwise(() => OtherConstantState )
+                // or => throw new BusinesFault()
+                // Please note that Otherwise is optional
 
-              // the actual fold over all domain events
-              .AggregateAllMessages();
+                // the actual fold over all domain events
+                .AggregateAllMessages();
+    }
 
-  }
 ```
 
 In some cases you want to save an event only once, but if you add the event into the list of Changes like above,
@@ -148,6 +157,7 @@ the event will save every time.
 Bad, very bad. Here comes the hero `Replay` ...
 
 ```csharp
+    
     class CoolAggregate() : Aggregate
     {
         ...
@@ -157,10 +167,10 @@ Bad, very bad. Here comes the hero `Replay` ...
             {
                 Replay(new SomethingHappend());
             }
-           else
-           {
-               Changes.Add(new SomethingHappend());
-           }
+            else
+            {
+                Changes.Add(new SomethingHappend());
+            }
         }
         ...
     }
@@ -175,6 +185,7 @@ Nice, really nice... But what if you want to **replay all Events** of an Aggrega
 To replay all Events of an Aggregate code this:
 
 ```csharp
+
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .EventsWithAggregateId(aggrId)
@@ -185,6 +196,7 @@ This published all Events of the Aggregate with the given ID to all registered E
 If you want to publish to only one special Event Handler change your Code to:
 
 ```csharp
+
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .EventsWithAggregateId(aggrId)
@@ -196,6 +208,7 @@ This is simple, as well.
 You can also replay events of an aggregate type:
 
 ```csharp
+
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .AllEvents()
@@ -205,6 +218,7 @@ You can also replay events of an aggregate type:
 You can also filter for certain event messages:
 
 ```csharp
+
     _aggregates
         .ReplayFor<[AnAggregateYouLike]>()
         .AllEvents()
