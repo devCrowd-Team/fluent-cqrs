@@ -20,6 +20,7 @@ let builtAssembly = name + ".dll"
 let toolsPath = "tools/"
 let nugetPath = toolsPath + "NuGet/NuGet.exe"
 let nunitPath = @".\packages\NUnit.Runners\tools\"
+let nunitExecutable = "nunit-console.exe"
 
 let version =
   match buildServer with
@@ -68,6 +69,7 @@ Target "Run Tests" (fun _ ->
         |> NUnit (fun p -> 
             {p with
                 ToolPath = nunitPath
+                ToolName = nunitExecutable
                 DisableShadowCopy = true; 
                 OutputFile = testBuildOutput + "/TestResults.xml"})
 

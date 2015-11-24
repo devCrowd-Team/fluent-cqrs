@@ -4,4 +4,4 @@ nuget FAKE
 nuget Paket
 nuget FluentAssertions = 3.5.0
 nuget Nunit = 2.6.4
-nuget NUnit.Runners
+nuget NUnit.Runners = 2.6.4
