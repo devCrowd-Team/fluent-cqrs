@@ -1,6 +1,10 @@
 # fluent-cqrs
 "The Next Generation" CQRS Framework for .Net applications
 
+![TeamCity Build Status](https://img.shields.io/teamcity/http/ci.devcrowd.de/s/OpenSource_FluentCqrs_NugetBuildAndPublish.svg)
+
+[![Nuget Version](https://img.shields.io/nuget/v/fluent-cqrs.svg)](https://www.nuget.org/packages/Fluent-CQRS/)
+
 ### Attenzione Attenzione:
 There is an **Api break**. The method `OnError` was splitted into `CatchException`
 (raised by unexpected System Exceptions) and `CatchFault` (raised by Business Faults).
