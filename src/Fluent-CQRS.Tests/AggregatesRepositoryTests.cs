@@ -205,5 +205,22 @@ namespace Fluent_CQRS.Tests
 
             _eventHandler.RecievedEvents.Count.Should().Be(1);
         }
+        [Test]
+        public void When_publish_events_from_TestAggregate_it_should_handled_by_both_assigned_TestEventHandlers()
+        {
+            var eventHandler2 = new TestEventHandler();
+            _aggregates
+                .PublishNewStateOf<TestAggregate>()
+                .To(_eventHandler)
+                .And(eventHandler2);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new AggregateId("Test"))
+                .Do(aggregate => aggregate.DoSomethingOnce());
+
+            _eventHandler.RecievedEvents.Count.Should().Be(1);
+            eventHandler2.RecievedEvents.Count.Should().Be(1);
+        }
     }
 }
