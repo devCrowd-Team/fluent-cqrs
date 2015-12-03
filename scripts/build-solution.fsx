@@ -8,7 +8,7 @@ let name = "Fluent-CQRS"
 let title = "Fluent CQRS Framework"
 let description = "The next generation of CQRS Framework."
 let id = "41246c8a-9b02-4be4-83ec-c88a26ee6054"
-let authors = ["Jan Fellien"; "Carsten Koenig"]
+let authors = ["Jan Fellien"; "Carsten Koenig"; "Stefan Cullmann"]
 let tags = "CQRS, Event Sourcing, Event Sore, DDD, Domain Driven Design"
 
 let buildOutput = "./build/"

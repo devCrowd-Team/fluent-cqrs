@@ -192,5 +192,18 @@ namespace Fluent_CQRS.Tests
                 .With(new AggregateId(aggrId))
                 .Do(aggr => aggr.Id.Should().Be(aggrId));
         }
+
+        [Test]
+        public void When_publish_events_from_TestAggregate_it_should_handle_the_events_at_TestEventHandler()
+        {
+            _aggregates.PublishNewStateOf<TestAggregate>().To(_eventHandler);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new AggregateId("Test"))
+                .Do(aggregate => aggregate.DoSomethingOnce());
+
+            _eventHandler.RecievedEvents.Count.Should().Be(1);
+        }
     }
 }
