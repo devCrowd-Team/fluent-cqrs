@@ -93,6 +93,8 @@
     <Compile Include="AggregateId.cs" />
     <Compile Include="AggregateLifeCycle.cs" />
     <Compile Include="Aggregates.cs" />
+    <Compile Include="FocusedEventHandlers.cs" />
+    <Compile Include="IConcatenateEventHandlersForAnAggregate.cs" />
     <Compile Include="ResultSet.cs" />
     <Compile Include="EventBag.cs" />
     <Compile Include="EventHandlers.cs" />

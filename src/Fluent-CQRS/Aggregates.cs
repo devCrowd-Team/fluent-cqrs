@@ -26,8 +26,8 @@ namespace Fluent_CQRS
         {
             var typeOfAggregate = typeof(TAggregate);
 
-            return _focusedEventHandlers.ContainsKey(typeOfAggregate) 
-                ? new AggregateLifeCycle<TAggregate>(_eventStore, _focusedEventHandlers[typeOfAggregate].NewStateCallback) 
+            return _focusedEventHandlers.ContainsKey(typeOfAggregate)
+                ? new AggregateLifeCycle<TAggregate>(_eventStore, TypedNewStateCallBack(typeOfAggregate)) 
                 : new AggregateLifeCycle<TAggregate>(_eventStore, NewStateCallback);
         }
 
@@ -62,35 +62,17 @@ namespace Fluent_CQRS
             _eventHandlers.Receive(events);
         }
 
+        Action<IEnumerable<IAmAnEventMessage>> TypedNewStateCallBack(Type typeOfAggregate)
+        {
+            var focusedCallBack = new Action<IEnumerable<IAmAnEventMessage>>(events =>
+            {
+                _focusedEventHandlers[typeOfAggregate].NewStateCallback(events);
+                NewStateCallback(events);
+            });
+            return focusedCallBack;
+        }
+
         void ReplayCallback(IEnumerable<IAmAnEventMessage> events)
-        {
-            _eventHandlers.Receive(events);
-        }
-    }
-
-    public interface IConcatenateEventHandlersForAnAggregate
-    {
-        IConcatenateEventHandler To(IHandleEvents eventHandler);
-    }
-
-    class FocusedEventHandlers : IConcatenateEventHandlersForAnAggregate
-    {
-        readonly EventHandlers _eventHandlers;
-
-        public FocusedEventHandlers()
-        {
-            _eventHandlers = new EventHandlers();
-        }
-
-        public IConcatenateEventHandler To(IHandleEvents eventHandler)
-        {
-            _eventHandlers.Add(eventHandler);
-
-
-            return _eventHandlers;
-        }
-
-        public void NewStateCallback(IEnumerable<IAmAnEventMessage> events)
         {
             _eventHandlers.Receive(events);
         }
