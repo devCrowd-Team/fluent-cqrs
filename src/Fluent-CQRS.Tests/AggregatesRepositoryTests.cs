@@ -209,6 +209,7 @@ namespace Fluent_CQRS.Tests
         public void When_publish_events_from_TestAggregate_it_should_handled_by_both_assigned_TestEventHandlers()
         {
             var eventHandler2 = new TestEventHandler();
+
             _aggregates
                 .PublishNewStateOf<TestAggregate>()
                 .To(_eventHandler)
@@ -220,6 +221,33 @@ namespace Fluent_CQRS.Tests
                 .Do(aggregate => aggregate.DoSomethingOnce());
 
             _eventHandler.RecievedEvents.Count.Should().Be(1);
+            eventHandler2.RecievedEvents.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void When_publish_events_from_two_Aggregates_it_should_handled_by_assigned_EventHandlers()
+        {
+            var eventHandler2 = new TestEventHandler();
+
+            _aggregates
+                .PublishNewStateOf<TestAggregate>()
+                .To(_eventHandler);
+
+            _aggregates
+                .PublishNewStateOf<AlternativeTestAggregate>()
+                .To(eventHandler2);
+
+            _aggregates
+                .Provide<TestAggregate>()
+                .With(new AggregateId("Test"))
+                .Do(aggregate => aggregate.DoFourActions());
+
+            _aggregates
+                .Provide<AlternativeTestAggregate>()
+                .With(new AggregateId("Alternativ"))
+                .Do(aggregate => aggregate.DoAlsoSomething());
+
+            _eventHandler.RecievedEvents.Count.Should().Be(4);
             eventHandler2.RecievedEvents.Count.Should().Be(1);
         }
     }
