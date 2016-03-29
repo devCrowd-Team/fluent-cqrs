@@ -256,5 +256,27 @@ namespace Fluent_CQRS.Tests
 
             _eventStore.RetrieveFor(testCommand.Id).OfType<InstanceCreated>().Count().Should().Be(1);
         }
+
+        [Test]
+        public void When_handling_multiple_aggregates_of_the_same_type_at_nearly_same_time_they_do_not_interfere()
+        {
+            var testCommand1 = new TestCommand
+            {
+                Id = "Test1"
+            };
+            var testCommand2 = new TestCommand
+            {
+                Id = "Test2"
+            };
+
+            var a1 = _aggregates.Provide<TestAggregate>().With(testCommand1);
+            var a2 = _aggregates.Provide<TestAggregate>().With(testCommand2);
+
+            a1.Do(a => a.DoSomething());
+            a2.Do(a => a.DoSomething());
+
+            _eventStore.RetrieveFor(testCommand1.Id).OfType<SomethingHappend>().Count().Should().Be(1);
+            _eventStore.RetrieveFor(testCommand2.Id).OfType<SomethingHappend>().Count().Should().Be(1);
+        }
     }
 }

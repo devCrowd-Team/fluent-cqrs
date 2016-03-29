@@ -12,7 +12,7 @@ namespace Fluent_CQRS
     {
         readonly IStoreAndRetrieveEvents _eventStore;
         readonly Action<IEnumerable<IAmAnEventMessage>> _publishMethod;
-        static TAggregate _aggregate;
+        TAggregate _aggregate;
 
         public AggregateLifeCycle(IStoreAndRetrieveEvents eventStore, Action<IEnumerable<IAmAnEventMessage>> publishMethod)
         {
