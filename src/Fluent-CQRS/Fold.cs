@@ -11,11 +11,11 @@ namespace Fluent_CQRS
         Func<TState, TState> _otherwise = state => state;  //identity
         TState _startValue;
 
-        public Fold(IEnumerable<IAmAnEventMessage> events)
+        internal  Fold(IEnumerable<IAmAnEventMessage> events)
             : this(events, default(TState))
         { }
 
-        public Fold(IEnumerable<IAmAnEventMessage> messages, TState startValue)
+        internal  Fold(IEnumerable<IAmAnEventMessage> messages, TState startValue)
         {
             _messages = messages;
             _startValue = startValue;
