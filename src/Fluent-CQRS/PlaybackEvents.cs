@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fluent_CQRS.Fluentation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +31,7 @@ namespace Fluent_CQRS
             return this;
         }
 
-        public void To(IHandleEvents eventHandler)
+        public void To(IHandle<IEnumerable<IAmAnEventMessage>> eventHandler)
         {
             eventHandler.Receive(_currentAggregateEvents);
         }
@@ -44,6 +45,11 @@ namespace Fluent_CQRS
         {
             _currentAggregateEvents = _currentAggregateEvents.OfType<TEvent>() as IEnumerable<IAmAnEventMessage> ;
             return this;
+        }
+
+        public void To(IHandleEvents eventHandler)
+        {
+            eventHandler.Receive(_currentAggregateEvents);
         }
     }
 }

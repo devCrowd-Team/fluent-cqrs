@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Fluent_CQRS
 {
-	public interface IHandleEvents
-	{
-		void Receive (IEnumerable<IAmAnEventMessage> events);
-	}
+    [Obsolete("Please use the generic IHandle interface instead")]
+    public interface IHandleEvents:IHandle<IEnumerable<IAmAnEventMessage>>
+    {   
+    }
 }
 

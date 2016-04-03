@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -6,7 +7,7 @@ namespace Fluent_CQRS.Extensions
 
 	public static class EventExtension
 	{
-		public static void HandleMeWith (this IAmAnEventMessage @event, IHandleEvents handler)
+		public static void HandleMeWith (this IAmAnEventMessage @event, IHandle<IEnumerable<IAmAnEventMessage>> handler)
 		{
 			var handlerType = handler.GetType ();
 			var eventType = @event.GetType ();
