@@ -64,6 +64,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fluent-CQRS.DomainSample.Contracts\Fluent-CQRS.DomainSample.Contracts.csproj">
+      <Project>{d4907453-9dff-43fb-be5c-016c67ac2a33}</Project>
+      <Name>Fluent-CQRS.DomainSample.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fluent-CQRS.Domain\Fluent-CQRS.Domain.csproj">
       <Project>{51f276fc-779a-4711-b115-fc1b452b5d0f}</Project>
       <Name>Fluent-CQRS.Domain</Name>
