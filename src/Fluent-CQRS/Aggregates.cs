@@ -1,49 +1,19 @@
-﻿using System.Collections.Generic;
-using Fluent_CQRS.Fluentation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Fluent_CQRS
 {
-	public sealed class Aggregates
-	{
-		private readonly IStoreAndRetrieveEvents _eventStore;
-		private readonly EventHandlers _eventHandlers;
+    [Obsolete("Please use AggregateContext instead.")]
+    public sealed class Aggregates : AggregateContext
+    {
+        internal Aggregates(IStoreAndRetrieveEvents eventStore) : base(eventStore) { }
 
-		public static Aggregates CreateWith (IStoreAndRetrieveEvents eventStore)
-		{
-			return new Aggregates (eventStore);
-		}
-
-		internal Aggregates (IStoreAndRetrieveEvents eventStore)
-		{
-			_eventStore = eventStore;
-			_eventHandlers = new EventHandlers ();
-		}
-
-		public IProvideAnAggregate<TAggregate> Provide<TAggregate> () where TAggregate : Aggregate
-		{
-			return new AggregateLifeCycle<TAggregate> (_eventStore, NewStateCallback);
-		}
-
-		public IConcatenateEventHandler PublishNewStateTo (IHandleEvents eventHandler)
-		{
-			_eventHandlers.Add (eventHandler);
-
-			return _eventHandlers;
-		}
-
-        public ICollectEvents ReplayFor<TAggregate>() where TAggregate : Aggregate
-	    {
-	        return new PlaybackEvents<TAggregate>(_eventStore, ReplayCallback);
-	    }
-
-		private void NewStateCallback (IEnumerable<IAmAnEventMessage> events)
-		{
-			_eventHandlers.Receive (events);
-		}
-
-        private void ReplayCallback(IEnumerable<IAmAnEventMessage> events)
+        public static new Aggregates CreateWith(IStoreAndRetrieveEvents eventStore)
         {
-            _eventHandlers.Receive(events);
+            return new Aggregates(eventStore);
         }
-	}
+    }
 }

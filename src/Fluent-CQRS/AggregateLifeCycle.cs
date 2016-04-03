@@ -147,8 +147,8 @@ namespace Fluent_CQRS
         {
             if (executionResult.HasErrors()) return executionResult;
 
-            _publishMethod(_aggregate.Changes);
-            _publishMethod(_aggregate.EventsToReplay);
+            _publishMethod(_aggregate.Changes.Concat(_aggregate.EventsToReplay));
+
 
             _aggregate.Changes.Clear();
             _aggregate.EventsToReplay.Clear();

@@ -1,6 +1,6 @@
 using System;
 
-namespace Fluent_CQRS.Fluentation
+namespace Fluent_CQRS
 {
     public interface IInvokeActionsOnAggregates<TAggregate>
     {
